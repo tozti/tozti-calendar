@@ -7,3 +7,9 @@
 .modal-card-body {
   overflow: visible !important;
 }
+
+
+/* TEMP FIX, TO BE REMOVE WHEN WE WILL UPDATE THE DESIGN IN COREJS */
+.main-content {
+    overflow: visible !important;
+}
