@@ -3,9 +3,6 @@
   "version": "0.0.1",
   "description": "Tozti's calendar extension",
   "main": "dist/js/index.js",
-  "dependencies": {
-    "buefy": "^0.6.3"
-  },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
