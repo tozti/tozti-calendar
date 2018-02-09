@@ -63,8 +63,8 @@
             </calendar-day>
         </template>
         <template v-else-if="scaleCalendar===1">
-            <calendar-week>
-            </calendar-week>
+            <view-event>
+            </view-event>
         </template>
         <template v-else>
             <calendar-month>
@@ -78,13 +78,14 @@ import ModalForm from './EventCreationModal.vue'
 import CalendarWeek from './CalendarWeek.vue'
 import CalendarDay from './CalendarDay.vue'
 import CalendarMonth from './CalendarMonth.vue'
-
+import ViewEvent from './ViewEvent.vue'
 export default {
     components: {
         ModalForm,
         CalendarWeek,
         CalendarMonth,
         CalendarDay,
+        ViewEvent
     },
     data() {
         return {

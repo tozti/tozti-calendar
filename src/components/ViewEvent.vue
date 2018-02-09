@@ -1,39 +1,48 @@
 <template>
   <div>
-    
-    <div id="toplayer">
-      <h1>Titre</h1>
-    </div>
-    
-    <div id="content">
-      <p>Hello</p>
-      <div id="app">
-	<ul>
-	  <li v-for="group in groups">
-	    {{groups.text}}
-	  </li>
-	  
-	</ul>
-      </div>
-      
-      <textarea v-bind:disabled="!modifiable">Swag swag swag
-      </textarea>
-    </div>
-
-</div>
+   <b-field label="Title">
+            <b-input maxlength="50"  v-model="title" v-bind:disabled="!modifiable"></b-input>
+        </b-field>
+     <b-field label="Groups">   
+	
+	
+	<b-taginput
+                v-model="taggedgroups":data="groups"
+                v-bind:disabled="!modifiable"
+                field="name"
+                autocomplete
+                :allowNew="allowNew"
+                icon="label"
+                placeholder="Add a group"
+                @typing="getFilteredGroups">
+            </b-taginput>
+  </b-field>
+          <b-field label="Description">
+            <b-input maxlength="200" type="textarea" v-model="description" v-bind:disabled="!modifiable"></b-input>
+        </b-field>
+        <b-switch v-model="modifiable" >
+                Modify
+        </b-switch>
+     
+   </div>
 </template>
 
 <script>
-  new Vue({
-  el:"#app",
-  data:{
-  
-  }
-  })
+ 
     export default {
-        data() {groups: [{text:"AliENS"},{text:"BDE"},{text:"AS"}]
-            return {
-            }
+        
+        data(){
+        	return {
+        	title:"Pinata Party",
+        		modifiable:false,
+        		description:"Pinata Party avec toutes les associations de l'ENS!",
+        		taggedgroups: 
+        			[{"name":"AliENS"},{"name":"BDE"},{"name":"AS"}],
+        		groups:
+        			[{"name":"AliENS"},{"name":"BDE"},{"name":"AS"},{"name":"ArcENSiel"},{"name":"Unknown"}],
+        		allowNew:false
+        	}
         }
     }
+    
 </script>
