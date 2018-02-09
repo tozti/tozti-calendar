@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section style="width:100%;">
         <nav class="level">
             <div class="level-left">
                 <p class="level-item"><a class="button">prev</a></p>
