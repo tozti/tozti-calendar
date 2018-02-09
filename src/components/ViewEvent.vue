@@ -1,28 +1,26 @@
 <template>
   <div>
-   <b-field label="Title">
+   <b-field label="Nom de l'événement">
             <b-input maxlength="50"  v-model="title" v-bind:disabled="!modifiable"></b-input>
    </b-field>
    
-    <b-field label="Select a date">
+    <b-field label="Date">
         <b-datepicker
-            placeholder="Type or select a date..."
             icon="calendar-today"
             v-bind:disabled="!modifiable"
 	    v-model="time">
         </b-datepicker>
     </b-field>
 
-    <b-field label="Select timepicker">
+    <b-field label="Heure">
         <b-timepicker
-            placeholder="Type or select a date..."
             icon="clock"
 	    v-bind:disabled="!modifiable"
 	    v-model="time">
         </b-timepicker>
     </b-field>
    
-   <b-field label="Groups">   
+   <b-field label="Groupes">   
 	<b-taginput
                 v-model="taggedgroups":data="groups"
                 v-bind:disabled="!modifiable"
@@ -58,7 +56,7 @@
         		groups:
         			[{"name":"AliENS"},{"name":"BDE"},{"name":"AS"},{"name":"ArcENSiel"},{"name":"Unknown"}],
         	        allowNew:false,
-		        time: new Date()
+		        time: new Date(),
         	}
         }
     }
