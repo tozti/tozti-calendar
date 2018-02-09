@@ -1,5 +1,14 @@
 <template>
     <section>
+        <div style="margin-bottom: 30px">
+            <template>
+	        <view-event>
+	        </view-event>
+	    </template>
+        </div>
+
+	<hr>
+	
         <nav class="level">
             <div class="level-left">
                 <p class="level-item"><a class="button">prev</a></p>
@@ -63,8 +72,8 @@
             </calendar-day>
         </template>
         <template v-else-if="scaleCalendar===1">
-            <view-event>
-            </view-event>
+            <calendar-week>
+            </calendar-week>
         </template>
         <template v-else>
             <calendar-month>
