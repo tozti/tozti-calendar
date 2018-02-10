@@ -8,17 +8,16 @@
                 </div>
         </div>
         <div class="tcw-container">
-            <div v-for="time in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]" class="tile is-ancestor is-marginless">
+            <div v-for="time in 24" class="tile is-ancestor is-marginless">
                 <div class="tile is-parent card tcw-spacer tcw-inner-cal">
                     <p> {{time}} </p>
                 </div>
                 <!-- plotting with a reverse z-index for events -->
                 <div v-for="weekday in weekdays" class="tile is-parent tcw-inner-cal is-paddingless tcw-entry" :style="'z-index: -' + time">
-                    <template v-if="weekday=='Lundi' && time % 9== 0">
+                    <template v-if="weekday=='Lundi' && time == 1">
                         <div class="event" draggable="true" resize="both">
                             eztopj
                         </div>
-
                     </template>
                 </div>
             </div> 
@@ -27,37 +26,15 @@
 </template>
 
 <script>
+import { enlarge_container_for_scrollbar } from './utils.js'
 export default {
     data() {
         return {
             'weekdays': ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
         }
     },
-    methods: {
-        enlarge_container_for_scrollbar: (container_class) => {
-            // As on Firefox and Chrome the scrollbar takes rooms inside the element,
-            // to keep everything align we must enlarge the element by the size of the scrollbar.
-            // Unfortunately, the size of the scrollbar isn't knowed until the page 
-            // is displayed (it is dependant on the browser
-            // this function will:
-            // - compute the size
-            // - enlarge elements containing a specific class
-            let div = document.createElement('div');
-            div.style.overflowY = 'scroll';
-            div.style.width = '50px';
-            div.style.height = '50px';
-            div.style.visibility = 'hidden';
-            document.body.appendChild(div);
-            let s = div.offsetWidth - div.clientWidth;
-            document.body.removeChild(div);
-
-            for (let e of document.getElementsByClassName(container_class)) {
-                e.style.marginRight = "-" + s + "px" 
-            }
-        }
-    },
     mounted() {
-        this.enlarge_container_for_scrollbar("tcw-container")
+        enlarge_container_for_scrollbar("tcw-container")
     }
 }
 
