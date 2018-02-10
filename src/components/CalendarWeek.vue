@@ -11,8 +11,15 @@
             <div v-for="time in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]" class="tile is-ancestor is-marginless">
                 <div class="tile is-parent card tcw-spacer tcw-inner-cal">
                     <p> {{time}} </p>
-                    </div>
-                <div v-for="weekday in weekdays" class="tile is-parent card tcw-inner-cal">
+                </div>
+                <!-- plotting with a reverse z-index for events -->
+                <div v-for="weekday in weekdays" class="tile is-parent tcw-inner-cal is-paddingless tcw-entry" :style="'z-index: -' + time">
+                    <template v-if="weekday=='Lundi' && time % 9== 0">
+                        <div class="event" draggable="true" resize="both">
+                            eztopj
+                        </div>
+
+                    </template>
                 </div>
             </div> 
         </div>
@@ -20,39 +27,39 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                'weekdays': ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
-            }
-        },
-        methods: {
-            enlarge_container_for_scrollbar: (container_class) => {
-                // As on Firefox and Chrome the scrollbar takes rooms inside the element,
-                // to keep everything align we must enlarge the element by the size of the scrollbar.
-                // Unfortunately, the size of the scrollbar isn't knowed until the page 
-                // is displayed (it is dependant on the browser
-                // this function will:
-                // - compute the size
-                // - enlarge elements containing a specific class
-                let div = document.createElement('div');
-                div.style.overflowY = 'scroll';
-                div.style.width = '50px';
-                div.style.height = '50px';
-                div.style.visibility = 'hidden';
-                document.body.appendChild(div);
-                let s = div.offsetWidth - div.clientWidth;
-                document.body.removeChild(div);
-            
-                for (let e of document.getElementsByClassName(container_class)) {
-                    e.style.marginRight = "-" + s + "px" 
-                }
-            }
-        },
-        mounted() {
-            this.enlarge_container_for_scrollbar("tcw-container")
+export default {
+    data() {
+        return {
+            'weekdays': ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
         }
+    },
+    methods: {
+        enlarge_container_for_scrollbar: (container_class) => {
+            // As on Firefox and Chrome the scrollbar takes rooms inside the element,
+            // to keep everything align we must enlarge the element by the size of the scrollbar.
+            // Unfortunately, the size of the scrollbar isn't knowed until the page 
+            // is displayed (it is dependant on the browser
+            // this function will:
+            // - compute the size
+            // - enlarge elements containing a specific class
+            let div = document.createElement('div');
+            div.style.overflowY = 'scroll';
+            div.style.width = '50px';
+            div.style.height = '50px';
+            div.style.visibility = 'hidden';
+            document.body.appendChild(div);
+            let s = div.offsetWidth - div.clientWidth;
+            document.body.removeChild(div);
+
+            for (let e of document.getElementsByClassName(container_class)) {
+                e.style.marginRight = "-" + s + "px" 
+            }
+        }
+    },
+    mounted() {
+        this.enlarge_container_for_scrollbar("tcw-container")
     }
+}
 
 
 </script>
@@ -66,13 +73,30 @@
 .tcw-container {
     /* For now the container has a fixed height.
     TODO: Find a way to make this height not fixed */
-    height: 500px;
-    overflow-y: scroll;
-    margin-right: 0px;
+height: 500px;
+overflow-y: scroll;
+margin-right: 0px;
 }
 
 .tcw-inner-cal {
-    z-index: -1;
+    z-index: -2;
+}
+
+.tcw-entry {
+    overflow: visible;
+    height: 50px;
+    background: white;
+    box-shadow: 0 0px 0px rgba(68, 68, 68, 0.1), 0 0 0 1px rgba(68, 68, 68, 0.1);
+}
+
+.event {
+    position: relative;
+    margin-top: 25%;
+    height: 200%;
+    width: 100%;
+    background-color: blue;
+    padding: 0;
+    margin: 0;
 }
 
 </style>
