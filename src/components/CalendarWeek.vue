@@ -1,23 +1,23 @@
 <template>
     <section >
-        <div class="tile is-ancestor is-marginless">
-            <div class="tile is-parent tcw-spacer">
+        <div class="tcw-row is-marginless">
+            <div class="tcw-inner-cal tcw-spacer">
                 </div>
-            <div v-for="weekday in weekdays" class="tile is-parent card">
+            <div v-for="weekday in weekdays" class="tcw-inner-cal tcw-title">
                     <p class="title">{{weekday}}</p>
                 </div>
         </div>
-        <div class="tcw-container">
-            <div v-for="time in 24" class="tile is-ancestor is-marginless">
-                <div class="tile is-parent card tcw-spacer tcw-inner-cal">
+        <div class="tcw-container" style="position:relative;">
+            <div v-for="time in 24" class="tcw-row is-marginless">
+                <div class="tcw-entry tcw-spacer tcw-inner-cal">
                     <p> {{time}} </p>
                 </div>
                 <!-- plotting with a reverse z-index for events -->
-                <div v-for="weekday in weekdays" class="tile is-parent tcw-inner-cal is-paddingless tcw-entry" :style="'z-index: -' + time">
+                <div v-for="weekday in weekdays" class="tcw-inner-cal tcw-entry">
                     <template v-if="weekday=='Lundi' && time == 1">
-                        <div class="event" draggable="true" resize="both">
-                            eztopj
-                        </div>
+            <div class="event">
+                eztopj
+            </div>
                     </template>
                 </div>
             </div> 
@@ -35,6 +35,11 @@ export default {
     },
     mounted() {
         enlarge_container_for_scrollbar("tcw-container")
+    },
+    methods: {
+        getCellSize : () => {
+            return 50
+        }
     }
 }
 
@@ -42,6 +47,17 @@ export default {
 </script>
 
 <style>
+
+.tcw-title {
+    padding: .75rem;
+    margin-bottom: .1rem;
+    box-shadow: 0 2px 3px rgba(68, 68, 68, 0.1), 0 0 0 1px rgba(68, 68, 68, 0.1);
+}
+
+.tcw-row {
+    display: flex;
+}
+
 
 .tcw-spacer{
     max-width: 50px;
@@ -56,21 +72,26 @@ margin-right: 0px;
 }
 
 .tcw-inner-cal {
-    z-index: -2;
+
+    align-items: stretch;
+    flex-basis: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
 }
+
 
 .tcw-entry {
     overflow: visible;
-    height: 50px;
+    height: 50px ;
     background: white;
     box-shadow: 0 0px 0px rgba(68, 68, 68, 0.1), 0 0 0 1px rgba(68, 68, 68, 0.1);
 }
 
 .event {
-    position: relative;
     margin-top: 25%;
-    height: 200%;
-    width: 100%;
+    position: relative;
+    height: 200px;
+    width: 100px;
     background-color: blue;
     padding: 0;
     margin: 0;
