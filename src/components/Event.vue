@@ -2,6 +2,8 @@
     <div @mousedown="handleDown">
         <slot>
         </slot>
+        <div class="tcw-handle-resize" @mousedown="resizeHandleDown">
+        </div>
     </div>
 </template>
 
@@ -9,9 +11,8 @@
 export default {
     props: ['gridDom'],
     created: function () {
-        this.selected = false
-        this.mouse_offset_x = 0;
-        this.mouse_offset_y = 0;
+        this.dragged = false
+        this.resized = false
     },
     mounted: function () {
         this.updatePosition()
@@ -34,15 +35,17 @@ export default {
         handleUp (e) {
             let pos = this.getMousePos(e)
             this.pauseEvent(e)
-            if (this.selected) {
-                this.selected = false
+            if (this.dragged) {
+                this.dragged = false
+            } 
+            if (this.resized) {
+                this.resized = false
             }
         },
         handleDown: function (e) {
             let pos = this.getMousePos(e)
             this.pauseEvent(e)
-            console.log("lertert")
-            this.selected = true;
+            this.dragged = true;
             let owner_cell = this.getOwnerCell()
             let mouse_cell = this.getHoveredCell(pos)
             this.offset = {'col': mouse_cell.col - owner_cell.col,
@@ -52,7 +55,7 @@ export default {
         handleMove: function (e) {
             let pos = this.getMousePos(e)
             this.pauseEvent(e)
-            if (this.selected) {
+            if (this.dragged) {
                 let cell_infos = this.getHoveredCell(pos)
                 if (cell_infos != null) {
                     let cell_coords = {'col': cell_infos.col - this.offset.col,
@@ -63,8 +66,24 @@ export default {
                         cell.appendChild(this.$el)
                     }
                 }
+            } 
+            if (this.resized) {
+                let cell_infos = this.getHoveredCell(pos)
+                if (cell_infos != null) {
+                    // + 1 because we can have a "single row cell"
+                    let size = cell_infos.row - this.getOwnerCell().row + 1
+                    if (size > 0) {
+                        this.$el.style.height = size * 100 + "%"
+                    }
+                }
             }
         },
+    
+        resizeHandleDown(e) {
+            this.pauseEvent(e)
+            this.resized = true
+        },
+
         updatePosition: function() {
         },
 
@@ -116,4 +135,11 @@ export default {
 </script>
 
 <style>
+.tcw-handle-resize {
+    position: absolute; 
+    bottom: 0; 
+    width: 100%; 
+    height: 25px; 
+    background-color:red;
+}
 </style>
