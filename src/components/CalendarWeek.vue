@@ -1,36 +1,32 @@
-<template>
-    <section >
-        <div class="tcw-row is-marginless">
-            <div class="tcw-inner-cal tcw-spacer">
+<template
+    <template>
+        <section >
+            <div class="tcw-row is-marginless">
+                <div class="tcw-inner-cal tcw-spacer">
                 </div>
-            <div v-for="weekday in weekdays" class="tcw-inner-cal tcw-title">
-                    <p class="title">{{weekday}}</p>
-                </div>
-        </div>
-        <div class="tcw-container" style="position:relative;">
-            <div v-for="time in 24" class="tcw-row is-marginless">
-                <div class="tcw-spacer tcw-inner-cal">
-                    <p> {{time}} </p>
-                </div>
-                <!-- plotting with a reverse z-index for events -->
-                <div v-for="weekday in weekdays" class="tcw-inner-cal tcw-entry">
-                    <template v-if="weekday=='Lundi' && time == 1")>
-                        <event class="event" :gridDom="gridDom">
+            <div v-for="weekday in weekdays" class="tcw-inner-cal tcw-title" >
+                <p class="title">{{weekday}}</p>
+            </div>
+            </div>
+            <div class="tcw-container" style="position:relative;">
+                <div v-for="time in 24" class="tcw-row is-marginless">
+                    <div class="tcw-spacer tcw-inner-cal twc-time">
+                        <p> {{time}} </p>
+                    </div>
+                    <!-- plotting with a reverse z-index for events -->
+                    <div v-for="weekday in weekdays" class="tcw-inner-cal tcw-entry">
+                        <template v-if="weekday=='Lundi' && time == 1")>
+                            <event class="event" :gridDom="gridDom">
                             eztopj
-                        </event>
-                    </template>
-                    <template v-if="weekday=='Mardi' && time == 13")>
-                        <event class="event" :gridDom="gridDom">
-                            eztopj
-                        </event>
-                    </template>
-                </div>
-            </div> 
-        </div>
-    </section>
-</template>
+                            </event>
+                        </template>
+                    </div>
+                </div> 
+            </div>
+        </section>
+    </template>
 
-<script>
+    <script>
 import { enlarge_container_for_scrollbar } from './utils.js'
 import Event from './Event.vue'
 export default {
@@ -94,6 +90,7 @@ export default {
 
 
 .tcw-spacer{
+    min-width: 50px;
     max-width: 50px;
 }
 
@@ -106,7 +103,7 @@ export default {
 }
 
 .tcw-inner-cal {
-
+    word-break: break-all;
     align-items: stretch;
     flex-basis: 0;
     flex-grow: 1;
@@ -136,7 +133,13 @@ export default {
     flex-basis: 0;
     flex-grow: 1;
     flex-shrink: 1;
-    
+
+}
+
+.twc-time {
+    align-self: flex-end;
+    text-align: right;
+    padding-right: 10px;
 }
 
 </style>
