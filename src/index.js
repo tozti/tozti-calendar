@@ -5,4 +5,4 @@ import Hello from './components/App.vue';
 tozti.routes.unshift(
   { path: '/calendar', component: Hello }
 )
-tozti.addMenuItem("Calendar", "/calendar")
+tozti.addMenuItem("Calendar", "/calendar", { icon: 'nc-calendar-60' })
