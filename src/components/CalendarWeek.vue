@@ -8,20 +8,30 @@
                 <p class="title">{{weekday}}</p>
             </div>
             </div>
-            <div class="tcw-container" style="position:relative;">
-                <div v-for="time in 24" class="tcw-row is-marginless">
-                    <div class="tcw-spacer tcw-inner-cal twc-time">
-                        <p> {{time}} </p>
+            <div class="tcw-container-scroll" style="position:relative;">
+                <div class = "tcw-container-fullcal is-paddingless is-marginless" style="position:relative;">
+                    <div class = "tcw-container is-paddingless is-marginless">
+                        <div v-for="time in 24" class="tcw-row is-marginless">
+                            <div class="tcw-spacer tcw-inner-cal twc-time">
+                                <p> {{time}} </p>
+                            </div>
+                            <!-- plotting with a reverse z-index for events -->
+                            <div v-for="weekday in weekdays" class="tcw-inner-cal tcw-entry">
+                                <!--  <template v-if="weekday=='Lundi' && time == 1")>
+                                    <event class="event" :gridDom="gridDom">
+                                    eztopj
+                                    </event>
+                                </template>
+                                -->
+                            </div>
+                        </div> 
                     </div>
-                    <!-- plotting with a reverse z-index for events -->
-                    <div v-for="weekday in weekdays" class="tcw-inner-cal tcw-entry">
-                        <template v-if="weekday=='Lundi' && time == 1")>
-                            <event class="event" :gridDom="gridDom">
-                            eztopj
-                            </event>
-                        </template>
+                    <div class="tcw-container-events">
+                        <event class="event" :gridDom="gridDom" row=0 col=0>
+                        eztopj
+                        </event>
                     </div>
-                </div> 
+                </div>
             </div>
         </section>
     </template>
@@ -40,7 +50,7 @@ export default {
         Event
     },
     mounted() {
-        enlarge_container_for_scrollbar("tcw-container")
+        enlarge_container_for_scrollbar("tcw-container-scroll")
         this.gridDom = this.computeGrid()
     },
     methods: {
@@ -49,11 +59,7 @@ export default {
         },
         computeGrid : function ()  {
             let grid = []
-            let calendar_root = null;
-            for (let child_element of this.$el.childNodes) {
-                if (child_element.nodeType == 1 && child_element.classList.contains("tcw-container"))
-                    calendar_root = child_element;
-            }
+            let calendar_root = document.getElementsByClassName("tcw-container")[0];
             if (calendar_root != null) {
                 for (let row of calendar_root.childNodes) {
                     let col_vm = []
@@ -78,6 +84,16 @@ export default {
 
 <style>
 
+
+.tcw-container-events {
+    border: 1px solid red;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
 .tcw-title {
     padding: .75rem;
     margin-bottom: .1rem;
@@ -94,7 +110,7 @@ export default {
     max-width: 50px;
 }
 
-.tcw-container {
+.tcw-container-scroll {
     /* For now the container has a fixed height.
     TODO: Find a way to make this height not fixed */
     height: 500px;

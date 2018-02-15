@@ -1,5 +1,5 @@
 <template>
-    <div @mousedown="handleDown">
+    <div @mousedown="handleDown" style="position:absolute; top:0; left:50px;">
         <slot>
         </slot>
         <div class="tcw-handle-resize" @mousedown="resizeHandleDown">
@@ -9,9 +9,10 @@
 
 <script>
 export default {
-    props: ['gridDom'],
+    props: ['gridDom', 'row', 'col'],
     created: function () {
         this.dragged = false
+        this.cell = {'row': this.row, 'col': this.col}
         this.resized = false
     },
     mounted: function () {
@@ -19,6 +20,12 @@ export default {
         document.documentElement.addEventListener('mousemove', this.handleMove, true)
         document.documentElement.addEventListener('mousedown', this.deselect, true)
         document.documentElement.addEventListener('mouseup', this.handleUp, true)
+
+        let cell = this.gridDom[this.cell.row][this.cell.col]
+        this.$el.style.top = cell.offsetTop + "px"
+        this.$el.style.left = cell.offsetLeft + "px"
+        this.$el.style.width = cell.style.width
+        this.$el.style.height = cell.style.height
     },
     beforeDestroy: function () {
         document.documentElement.removeEventListener('mousemove', this.handleMove, true)
@@ -41,12 +48,14 @@ export default {
             if (this.resized) {
                 this.resized = false
             }
+            console.log("bar")
         },
         handleDown: function (e) {
             let pos = this.getMousePos(e)
             this.pauseEvent(e)
+            console.log("foo")
             this.dragged = true;
-            let owner_cell = this.getOwnerCell()
+            let owner_cell = this.cell
             let mouse_cell = this.getHoveredCell(pos)
             this.offset = {'col': mouse_cell.col - owner_cell.col,
                            'row': mouse_cell.row - owner_cell.row}
@@ -62,8 +71,14 @@ export default {
                                        'row': cell_infos.row - this.offset.row}
                     if (this.checkDragValidity(cell_coords)) {
                         let cell = this.gridDom[cell_coords.row][cell_coords.col]
+                        /*
                         this.$el.parentNode.removeChild(this.$el)
                         cell.appendChild(this.$el)
+                        */
+                        this.cell = cell_coords
+                        this.$el.style.top = cell.offsetTop + "px"
+                        this.$el.style.left = cell.offsetLeft + "px"
+                        this.$el.style.width = cell.offsetWidth + "px"
                     }
                 }
             } 
@@ -71,9 +86,11 @@ export default {
                 let cell_infos = this.getHoveredCell(pos)
                 if (cell_infos != null) {
                     // + 1 because we can have a "single row cell"
-                    let size = cell_infos.row - this.getOwnerCell().row + 1
+                    let size = cell_infos.el.offsetTop + cell_infos.el.offsetHeight - this.gridDom[this.cell.row][this.cell.col].offsetTop;
+                    //let size = cell_infos.row - this.cell.row + 1
                     if (size > 0) {
-                        this.$el.style.height = size * 100 + "%"
+                        this.$el.style.height = size + "px"
+                        //this.$el.style.height = size * 100 + "%"
                     }
                 }
             }
@@ -101,12 +118,17 @@ export default {
             e.returnValue=false;
         },
 
+        contain(dom_el, position) {
+            let boundrect = dom_el.getBoundingClientRect()
+            return (boundrect.x <= position.x && position.x <= boundrect.x + boundrect.width
+                        && boundrect.y <= position.y && position.y <= boundrect.y + boundrect.height) 
+        },
+
         getHoveredCell(position) {
             for (let row_i = 0; row_i < this.gridDom.length; ++row_i) {
                 for (let col_i = 0; col_i < this.gridDom[row_i].length; ++col_i) {
                     let boundrect = this.gridDom[row_i][col_i].getBoundingClientRect()
-                    if (boundrect.x <= position.x && position.x <= boundrect.x + boundrect.width
-                        && boundrect.y <= position.y && position.y <= boundrect.y + boundrect.height) {
+                    if (this.contain(this.gridDom[row_i][col_i], position)) {
                         return {"el": this.gridDom[row_i][col_i], 'row': row_i, 'col': col_i}
 
                     }
