@@ -1,5 +1,5 @@
 <template>
-    <div @mousedown="mousedown">
+    <div @mousedown="mousedown" @mousemove="mousemove" @mouseup="mouseup">
     </div>
 </template>
 
@@ -29,8 +29,15 @@ export default {
     methods: {
         mousedown(e) {
             pauseEvent(e)
-            const pos = getMousePos(e)
-            this.$emit('click-down', this.computeInformations(pos))
+            this.$emit('click-down', this.computeInformations(getMousePos(e)))
+        },
+        mousemove(e) {
+            pauseEvent(e)
+            this.$emit('click-move', this.computeInformations(getMousePos(e)))
+        },
+        mouseup(e) {
+            pauseEvent(e)
+            this.$emit('click-up', this.computeInformations(getMousePos(e)))
         },
 
         computeInformations(pos) {

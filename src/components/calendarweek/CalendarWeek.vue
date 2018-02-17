@@ -9,29 +9,38 @@
             </div>
             <div class="tcw-container-scroll" style="position:relative;">
                 <div class = "tcw-container-fullcal is-paddingless is-marginless" style="position:relative;">
-                    <div class = "tcw-container is-paddingless is-marginless">
+                    <div class = "tcw-container is-paddingless is-marginless" style="position: relative;">
                         <div v-for="time in 24" class="tcw-row is-marginless">
                             <div class="tcw-spacer tcw-inner-cal twc-time">
                                 <p> {{time}} </p>
                             </div>
                             <calendar-cell v-for="(weekday, index) in days"
+                                           ref = "cells"
                                            :key="index" 
                                            :day="index"
                                            :start="(time - 1) * 60"
                                            :end="(time - 1) * 60 + 60"
                                            v-on:click-down="cellSelected($event)"
+                                           v-on:click-move="cellDrag($event)"
+                                           v-on:click-up="cellUnselected($event)"
                                            class="tcw-inner-cal tcw-entry">
                             </calendar-cell>
                         </div> 
                     </div>
-                    <!--                    <div class="tcw-container-events">
-                    </div>-->
+                    <div class="tcw-container-events">
+                        <Event  :start-day="6" 
+                                :end-day="6"
+                                :start-time="65"
+                                :end-time="120">
+                        </Event>
+                    </div>
                 </div>
             </div>
         </section>
     </template>
 
     <script>
+let _this
 import { enlargeContainerForScrollbar } from './../utils.js'
 import Event from './Event.vue'
 import CalendarCell from './CalendarCell.vue'
@@ -42,6 +51,9 @@ export default {
             'gridDom': [[]]
         }
     },
+    created() {
+        _this = this
+    },
     components: {
         Event,
         CalendarCell
@@ -49,12 +61,28 @@ export default {
     mounted() {
         enlargeContainerForScrollbar("tcw-container-scroll")
     },
+    provide: {
+        timeToDisplayable(day, time) {
+            const cells = _this.$refs.cells
+            const cell = cells[((time / 60) | 0) * _this.days.length + day]
+            return {
+                'top': cell.$el.offsetTop,
+                'left': cell.$el.offsetLeft,
+                'width': cell.$el.offsetWidth,
+                'height': cell.$el.offsetHeight
+            }
+        }  
+    },
     methods: {
         getCellSize : () => {
             return 50
         },
         cellSelected(value) {
-            console.log(value) 
+        },
+        cellUnselected(value) {
+        },
+        cellDrag(value) {
+            //let container = document.getElementsByClassName("tcw-container-scroll")[0]
         },
     }
 }
@@ -72,6 +100,7 @@ export default {
     left: 0;
     bottom: 0;
     right: 0;
+    pointer-events: none;
 }
 
 .tcw-title {
