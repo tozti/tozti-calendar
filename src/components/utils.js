@@ -1,4 +1,4 @@
-export function enlarge_container_for_scrollbar (container_class) {
+export function enlargeContainerForScrollbar (container_class) {
     // As on Firefox and Chrome the scrollbar takes rooms inside the element,
     // to keep everything align we must enlarge the element by the size of the scrollbar.
     // Unfortunately, the size of the scrollbar isn't knowed until the page 
@@ -18,4 +18,17 @@ export function enlarge_container_for_scrollbar (container_class) {
     for (let e of document.getElementsByClassName(container_class)) {
         e.style.marginRight = "-" + s + "px" 
     }
+}
+
+export function pauseEvent(e) {
+    if(e.stopPropagation) e.stopPropagation();
+    if(e.preventDefault) e.preventDefault();
+    e.cancelBubble=true;
+    e.returnValue=false;
+}
+
+export function getMousePos(e) {
+    let mousex = e.pageX || e.clientX + document.documentElement.scrollLeft
+    let mousey = e.pageY || e.clientY + document.documentElement.scrollTop
+    return {'x': mousex, 'y': mousey}
 }

@@ -1,10 +1,9 @@
-<template
-    <template>
+<template>
         <section >
             <div class="tcw-row is-marginless">
                 <div class="tcw-inner-cal tcw-spacer">
                 </div>
-            <div v-for="weekday in weekdays" class="tcw-inner-cal tcw-title" >
+            <div v-for="weekday in days" class="tcw-inner-cal tcw-title" >
                 <p class="title">{{weekday}}</p>
             </div>
             </div>
@@ -15,74 +14,55 @@
                             <div class="tcw-spacer tcw-inner-cal twc-time">
                                 <p> {{time}} </p>
                             </div>
-                            <!-- plotting with a reverse z-index for events -->
-                            <div v-for="weekday in weekdays" class="tcw-inner-cal tcw-entry">
-                                <!--  <template v-if="weekday=='Lundi' && time == 1")>
-                                    <event class="event" :gridDom="gridDom">
-                                    eztopj
-                                    </event>
-                                </template>
-                                -->
-                            </div>
+                            <calendar-cell v-for="(weekday, index) in days"
+                                           :key="index" 
+                                           :day="index"
+                                           :start="(time - 1) * 60"
+                                           :end="(time - 1) * 60 + 60"
+                                           v-on:click-down="cellSelected($event)"
+                                           class="tcw-inner-cal tcw-entry">
+                            </calendar-cell>
                         </div> 
                     </div>
-                    <div class="tcw-container-events">
-                        <event class="event" :gridDom="gridDom" row=0 col=0>
-                        eztopj
-                        </event>
-                    </div>
+                    <!--                    <div class="tcw-container-events">
+                    </div>-->
                 </div>
             </div>
         </section>
     </template>
 
     <script>
-import { enlarge_container_for_scrollbar } from './utils.js'
+import { enlargeContainerForScrollbar } from './../utils.js'
 import Event from './Event.vue'
+import CalendarCell from './CalendarCell.vue'
 export default {
+    props: ['days'],
     data() {
         return {
-            'weekdays': ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'],
             'gridDom': [[]]
         }
     },
     components: {
-        Event
+        Event,
+        CalendarCell
     },
     mounted() {
-        enlarge_container_for_scrollbar("tcw-container-scroll")
-        this.gridDom = this.computeGrid()
+        enlargeContainerForScrollbar("tcw-container-scroll")
     },
     methods: {
         getCellSize : () => {
             return 50
         },
-        computeGrid : function ()  {
-            let grid = []
-            let calendar_root = document.getElementsByClassName("tcw-container")[0];
-            if (calendar_root != null) {
-                for (let row of calendar_root.childNodes) {
-                    let col_vm = []
-                    for (let col of row.childNodes) {
-                        if (col.nodeType == 1 && !col.classList.contains("tcw-spacer")) {
-                            col_vm.push(col)
-                        }
-                    }
-                    console.log(row);
-                    if (row.nodeType == 1)
-                        grid.push(col_vm)
-                } 
-            }
-            console.log(grid)
-            return grid
-        }
+        cellSelected(value) {
+            console.log(value) 
+        },
     }
 }
 
 
 </script>
 
-<style>
+<style scoped>
 
 
 .tcw-container-events {

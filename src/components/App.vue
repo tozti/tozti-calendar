@@ -63,7 +63,7 @@
             </calendar-day>
         </template>
         <template v-else-if="scaleCalendar===1">
-            <calendar-week>
+            <calendar-week :days="['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']">
             </calendar-week>
         </template>
         <template v-else>
@@ -75,7 +75,7 @@
 
 <script>
 import ModalForm from './EventCreationModal.vue'
-import CalendarWeek from './CalendarWeek.vue'
+import CalendarWeek from './calendarweek/CalendarWeek.vue'
 import CalendarDay from './CalendarDay.vue'
 import CalendarMonth from './CalendarMonth.vue'
 
