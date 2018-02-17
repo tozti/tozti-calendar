@@ -39,11 +39,13 @@ export default {
     methods: {
 
         updateDisplay() {
-            let start_cell = this.gridDom[this.start.hour][this.day]
+            const start_cell = this.gridDom[this.start.hour][this.day]
+            const end_cell = this.gridDom[this.end.hour][this.day]
             this.$el.style.left = start_cell.offsetLeft + "px"
             this.$el.style.width = start_cell.offsetWidth + "px"
-            this.$el.style.top = (start_cell.offsetTop + (start_cell.offsetHeight * (this.start.quarter / 4))) + "px"
-            console.log(this.$el.style.top)
+            const computed_top = (start_cell.offsetTop + (start_cell.offsetHeight * (this.start.quarter / 4)))
+            this.$el.style.top = computed_top + "px"
+            this.$el.style.height = end_cell.offsetTop + (end_cell.offsetHeight * (this.end.quarter / 4))- computed_top + "px"
         },
 
         handleUp (e) {
@@ -55,16 +57,13 @@ export default {
             if (this.resized) {
                 this.resized = false
             }
-            console.log("bar")
         },
         handleDown: function (e) {
             let pos = this.getMousePos(e)
             this.pauseEvent(e)
-            console.log("foo")
             this.dragged = true;
             let owner_cell = {'row': this.start.hour, 'col': this.day, 'sub': this.start.quarter}
             let mouse_cell = this.getHoveredCell(pos)
-            console.log(mouse_cell.sub, owner_cell.sub)
             this.offset = {'col': mouse_cell.col - owner_cell.col,
                            'row': mouse_cell.row - owner_cell.row,
                             'sub': mouse_cell.sub - owner_cell.sub}
@@ -85,10 +84,30 @@ export default {
                         this.$el.parentNode.removeChild(this.$el)
                         cell.appendChild(this.$el)
                         */
+                        let duration = {'hour': this.end.hour - this.start.hour,
+                                        'quarter': this.end.quarter - this.start.quarter}
+                        if (duration.quarter >= 4) {
+                            duration.hour += 1
+                            duration.quarter -= 4
+                        } else if (duration.quarter <= -4) {
+                            duration.hour -= 1
+                            duration.quarter += 4
+                        }
                         this.day = cell_coords.col
                         this.start.hour = cell_coords.row
                         this.start.quarter = cell_coords.sub 
-                        console.log(cell_coords.sub)
+
+                        this.end.hour = this.start.hour + duration.hour
+                        this.end.quarter = this.start.quarter + duration.quarter
+                        if (this.end.quarter >= 4) {
+                            this.end.hour += 1
+                            this.end.quarter -= 4
+                        } else if (this.end.quarter <= -4) {
+                            this.end.hour -= 1
+                            this.end.quarter += 4
+                        }
+
+
                         this.updateDisplay()
                     }
                 }
@@ -97,10 +116,15 @@ export default {
                 let cell_infos = this.getHoveredCell(pos)
                 if (cell_infos != null) {
                     // + 1 because we can have a "single row cell"
+                    let size = cell_infos.row - this.start.hour
                     //let size = cell_infos.row - this.cell.row + 1
-                    if (cell_infos.row >= this.start.hour) {
+                    console.log(cell_infos.row, this.start.hour)
+                    if (size >= 0) {
                         this.end.hour = cell_infos.row
+                        this.end.quarter = cell_infos.sub
                         //this.$el.style.height = size * 100 + "%"
+
+                        this.updateDisplay()
                     }
                 }
             }
