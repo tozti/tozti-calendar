@@ -63,7 +63,8 @@
             </calendar-day>
         </template>
         <template v-else-if="scaleCalendar===1">
-            <calendar-week :days="['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']">
+            <calendar-week :days="['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']"
+                           :events="[{start: {day: 0, time:30}, end:{day: 0, time:270}}]">
             </calendar-week>
         </template>
         <template v-else>

@@ -28,10 +28,12 @@
                         </div> 
                     </div>
                     <div class="tcw-container-events">
-                        <Event  :start-day="6" 
-                                :end-day="6"
-                                :start-time="65"
-                                :end-time="120">
+                        <Event v-for="(event, id) in events" 
+                                :key="id"
+                                :start-day="event.start.day" 
+                                :end-day="event.end.day"
+                                :start-time="event.start.time"
+                                :end-time="event.end.time">
                         </Event>
                     </div>
                 </div>
@@ -45,7 +47,7 @@ import { enlargeContainerForScrollbar } from './../utils.js'
 import Event from './Event.vue'
 import CalendarCell from './CalendarCell.vue'
 export default {
-    props: ['days'],
+    props: ['days', 'events'],
     data() {
         return {
             'gridDom': [[]]
