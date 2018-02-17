@@ -8,9 +8,10 @@
 </template>
 
 <script>
+import { elementContains } from './../utils.js'
 export default {
     inject: ['timeToDisplayable'],
-    props: ["start-day", "end-day", "start-time", "end-time"],
+    props: ["start-day", "end-day", "start-time", "end-time", "uid"],
     created: function () {
     },
     mounted: function () {
@@ -41,7 +42,15 @@ export default {
             this.$el.style.left = disp1.left + "px"
             this.$el.style.height = disp2.top - disp1.top + "px"
             this.$el.style.width = disp2.width + "px"
-        }
+        },
+
+        handleContains(pos) {
+            return elementContains(this.$el.getElementsByClassName("tcw-handle-resize")[0], pos)
+        },
+
+        eventContains(pos) {
+            return elementContains(this.$el, pos)
+        },
     },
 
     watch: {

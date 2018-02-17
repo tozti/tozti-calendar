@@ -32,3 +32,11 @@ export function getMousePos(e) {
     let mousey = e.pageY || e.clientY + document.documentElement.scrollTop
     return {'x': mousex, 'y': mousey}
 }
+
+export function elementContains(el, pos) {
+    const bounds = el.getBoundingClientRect()
+
+    return (bounds.x <= pos.x && pos.x < bounds.x + bounds.width)
+            && (bounds.y <= pos.y && pos.y < bounds.y + bounds.height)
+
+}

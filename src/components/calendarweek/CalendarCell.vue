@@ -54,7 +54,9 @@ export default {
                 day: this.day,
                 quarter: (time % 15) / 15 | 0,
                 hour: (time / 60) | 0,
-                time: time
+                time: time,
+                x: pos.x,
+                y: pos.y,
             }
         }
     },
