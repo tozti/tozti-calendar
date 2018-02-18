@@ -38,5 +38,36 @@ export function elementContains(el, pos) {
 
     return (bounds.x <= pos.x && pos.x < bounds.x + bounds.width)
             && (bounds.y <= pos.y && pos.y < bounds.y + bounds.height)
+}
 
+// do a class ?
+export function dateAdd(a, b) {
+    let temp = {
+        day: a.day + b.day,
+        time: a.time + b.time
+    }
+    if (temp.time >= 24*60) {
+        temp.day += (temp.time / (24*60)) | 0
+        temp.time %= 24*60
+    }
+    return temp
+}
+
+export function dateSub(a, b) {
+    let temp = {
+        day: a.day - b.day,
+        time: a.time - b.time
+    }
+    /*if (temp.time < 0) {
+        temp.day += (temp.time / (24*60)) | 0
+        temp.time %= 24*60
+    }*/
+    return temp
+}
+
+export function dateCopy(a) {
+    return {
+        day: a.day,
+        time: a.time
+    }
 }

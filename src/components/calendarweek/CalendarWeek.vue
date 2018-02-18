@@ -47,7 +47,7 @@
 // to keep a reference to this component
 let _this
 const CWActionStatus = Object.freeze({resize: 0, drag: 1, none: 2})
-import { enlargeContainerForScrollbar } from './../utils.js'
+import { enlargeContainerForScrollbar, dateSub, dateAdd, dateCopy } from './../utils.js'
 import Event from './Event.vue'
 import CalendarCell from './CalendarCell.vue'
 export default {
@@ -97,20 +97,11 @@ export default {
                     this.state.event_source = event_source
 
                     this.state.copy = {
-                        start: {
-                            day: event_source.start.day,
-                            time: event_source.start.time
-                        },
-                        end: {
-                            day: event_source.end.day,
-                            time: event_source.end.time
-                        }
+                        start: dateCopy(event_source.start),
+                        end: dateCopy(event_source.end)
                     }
 
-                    this.state.start = {
-                        day: value.day,
-                        time: value.time
-                    }
+                    this.state.start = dateCopy(value)
 
                     if (it[1].handleContains(value)) {
                         this.state.status = CWActionStatus.resize
@@ -125,33 +116,11 @@ export default {
 
         cellDrag(value) {
             if (this.state.status === CWActionStatus.drag) {
-                let move_direction = {
-                    day: value.day - this.state.start.day,
-                    time: value.time - this.state.start.time,
-                }
-                // because vue js can't detect change of the type: "this.eventsTest[0].foo"
-                // need some refactor
-                this.$set(this.eventsTest, this.state.id, {
-                    start: {
-                        day: move_direction.day + this.state.copy.start.day,
-                        time: move_direction.time + this.state.copy.start.time
-                    },
-                    end: {
-                        day: move_direction.day + this.state.copy.end.day,
-                        time: move_direction.time + this.state.copy.end.time
-                    }
-                })
+                let move_direction = dateSub(value, this.state.start)
+                this.state.event_source.start = dateAdd(move_direction, this.state.copy.start)
+                this.state.event_source.end = dateAdd(move_direction, this.state.copy.end)
             } else if (this.state.status === CWActionStatus.resize) {
-                this.$set(this.eventsTest, this.state.id, {
-                    start: {
-                        day: this.state.copy.start.day,
-                        time: this.state.copy.start.time
-                    },
-                    end: {
-                        day: this.state.copy.end.day,
-                        time: value.time
-                    }
-                })
+                this.state.event_source.end.time = value.time
             }
 
             //let container = document.getElementsByClassName("tcw-container-scroll")[0]
