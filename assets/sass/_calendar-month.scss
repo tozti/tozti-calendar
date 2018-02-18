@@ -29,7 +29,16 @@ $tcm-calendar-left-margin: 60px;
 
 .tcm-calendar-entry {
     padding: 0 10px;
+    border: 1px solid black;
+    margin-left: -1px;
+    margin-bottom: -1px;
 }
+
+.tcm-calendar-entry:nth-child(8n+1){
+    border: none;
+}
+
+
 
 .tcm-calendar-entry .tcm-calendar-entry-inner {
     height: 100%;
