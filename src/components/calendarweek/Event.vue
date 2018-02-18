@@ -11,7 +11,7 @@
 import { elementContains } from './../utils.js'
 export default {
     inject: ['timeToDisplayable'],
-    props: ["start-day", "end-day", "start-time", "end-time", "uid"],
+    props: ["start", "end", "uid"],
     created: function () {
     },
     mounted: function () {
@@ -36,8 +36,8 @@ export default {
 
     methods: {
         updateDisplay() {
-            let disp1 = this.timeToDisplayable(this.startDay, this.startTime)
-            let disp2 = this.timeToDisplayable(this.endDay, this.endTime)
+            let disp1 = this.timeToDisplayable(this.start)
+            let disp2 = this.timeToDisplayable(this.end)
             this.$el.style.top = disp1.top + "px" 
             this.$el.style.left = disp1.left + "px"
             this.$el.style.height = disp2.top - disp1.top + "px"
@@ -54,16 +54,10 @@ export default {
     },
 
     watch: {
-        startDay: function(x) {
+        start: function(x) {
             this.updateDisplay()
         },
-        endDay: function(x) {
-            this.updateDisplay()
-        },
-        startTime: function(x) {
-            this.updateDisplay()
-        },
-        endTime: function(x) {
+        end: function(x) {
             this.updateDisplay()
         },
     }

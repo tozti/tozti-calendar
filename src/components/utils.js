@@ -40,34 +40,32 @@ export function elementContains(el, pos) {
             && (bounds.y <= pos.y && pos.y < bounds.y + bounds.height)
 }
 
-// do a class ?
-export function dateAdd(a, b) {
-    let temp = {
-        day: a.day + b.day,
-        time: a.time + b.time
+export function computeTimeRange(startTime, endTime) {
+    let out = []
+    let s = startTime
+    while (s <= endTime) {
+        s.setDate(s.getDate() + 1)
+        out.push(new Date(s.getTime()))
     }
-    if (temp.time >= 24*60) {
-        temp.day += (temp.time / (24*60)) | 0
-        temp.time %= 24*60
-    }
-    return temp
+    return out
 }
 
-export function dateSub(a, b) {
-    let temp = {
-        day: a.day - b.day,
-        time: a.time - b.time
+export function createOffsetDate(year, month, day, hour, minutes) {
+    let offset = new Date(0)
+    if (year != 0) {
+        offset.setFullYear(offset.getFullYear() + year)
     }
-    /*if (temp.time < 0) {
-        temp.day += (temp.time / (24*60)) | 0
-        temp.time %= 24*60
-    }*/
-    return temp
-}
-
-export function dateCopy(a) {
-    return {
-        day: a.day,
-        time: a.time
+    if (month != 0) {
+        offset.setMonth(offset.getMonth() + month)
     }
+    if (day != 0) {
+        offset.setDate(offset.getDate() + ay)
+    }
+    if (hour != 0) {
+        offset.setHours(offset.getHours() + hour)
+    }
+    if (minutes != 0) {
+        offset.setMinutes(offset.getMinutes() + minutes)
+    }
+    return offset
 }

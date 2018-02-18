@@ -3,23 +3,22 @@
         <div class="tcw-row is-marginless">
             <div class="tcw-inner-cal tcw-spacer">
             </div>
-        <div v-for="weekday in days" class="tcw-inner-cal tcw-title" >
-            <p class="title">{{weekday}}</p>
+        <div v-for="time in timeRange" class="tcw-inner-cal tcw-title" >
+            <p class="title">{{time.getDate()}}</p>
         </div>
         </div>
         <div class="tcw-container-scroll" style="position:relative;">
             <div class = "tcw-container-fullcal is-paddingless is-marginless" style="position:relative;">
                 <div class = "tcw-container is-paddingless is-marginless" style="position: relative;">
-                    <div v-for="time in 24" class="tcw-row is-marginless">
+                    <div v-for="hour in 24" class="tcw-row is-marginless">
                         <div class="tcw-spacer tcw-inner-cal twc-time">
-                            <p> {{time}} </p>
+                            <p> {{hour}} </p>
                         </div>
-                        <calendar-cell v-for="(weekday, index) in days"
+                        <calendar-cell v-for="time in timeRange"
                                        ref = "cells"
-                                       :key="index" 
-                                       :day="index"
-                                       :start="(time - 1) * 60"
-                                       :end="(time - 1) * 60 + 60"
+                                       :key="time.getTime()" 
+                                       :time="computeCorrectTime(time, hour)"
+                                       :duration="new Date(durationCell.getTime())"
                                        v-on:click-down="cellSelected($event)"
                                        v-on:click-move="cellDrag($event)"
                                        v-on:click-up="cellUnselected($event)"
@@ -32,10 +31,8 @@
                            ref = "events"
                            :key="id"
                            :uid="id"
-                           :start-day="event.start.day" 
-                           :end-day="event.end.day"
-                           :start-time="event.start.time"
-                           :end-time="event.end.time">
+                           :start="event.start" 
+                           :end="event.end">
                     </Event>
                 </div>
             </div>
@@ -47,14 +44,16 @@
 // to keep a reference to this component
 let _this
 const CWActionStatus = Object.freeze({resize: 0, drag: 1, none: 2})
-import { enlargeContainerForScrollbar, dateSub, dateAdd, dateCopy } from './../utils.js'
+import { enlargeContainerForScrollbar, computeTimeRange, createOffsetDate } from './../utils.js'
 import Event from './Event.vue'
 import CalendarCell from './CalendarCell.vue'
 export default {
-    props: ['days', 'events'],
+    props: ['start-day', 'end-day', 'events'],
     data() {
         return {
-           eventsTest : this.events
+            eventsTest : this.events,
+            timeRange : computeTimeRange(this.startDay, this.endDay),
+            durationCell : createOffsetDate(0, 0, 0, 1, 0)
         }
     },
     created() {
@@ -70,12 +69,22 @@ export default {
         enlargeContainerForScrollbar("tcw-container-scroll")
     },
     provide: {
-        timeToDisplayable(day, time) {
+        timeToDisplayable(date) {
+            const day = date.getDate()
+            const hour = date.getHours()
+            const minutes = date.getMinutes()
             const cells = _this.$refs.cells
-            const cell = cells[((time / 60) | 0) * _this.days.length + day]
-            const quarter = ((time % 60) / 15) | 0
+            let cell = null
+            for (let c of cells) {
+                if (c.time.getTime() <= date.getTime() && date.getTime() <= c.time.getTime() + c.duration.getTime()) {
+                    cell = c
+                }
+            }
+            if (cell === null)
+                return null
             return {
-                'top': cell.$el.offsetTop + cell.$el.offsetHeight * quarter / 4,
+                //put offset back
+                'top': cell.$el.offsetTop + (minutes / 60) * cell.$el.offsetHeight,
                 'left': cell.$el.offsetLeft,
                 'width': cell.$el.offsetWidth,
                 'height': cell.$el.offsetHeight
@@ -97,11 +106,11 @@ export default {
                     this.state.event_source = event_source
 
                     this.state.copy = {
-                        start: dateCopy(event_source.start),
-                        end: dateCopy(event_source.end)
+                        start: new Date(event_source.start.getTime()),
+                        end: new Date(event_source.end.getTime())
                     }
 
-                    this.state.start = dateCopy(value)
+                    this.state.start = new Date(value.time.getTime())
 
                     if (it[1].handleContains(value)) {
                         this.state.status = CWActionStatus.resize
@@ -110,17 +119,23 @@ export default {
             }
         },
 
+        computeCorrectTime(date, hour) {
+            let temp = new Date(date.getTime())
+            temp.setHours(hour)
+            return temp
+        },
+
         cellUnselected(value) {
             this.state.status = CWActionStatus.none
         },
 
         cellDrag(value) {
             if (this.state.status === CWActionStatus.drag) {
-                let move_direction = dateSub(value, this.state.start)
-                this.state.event_source.start = dateAdd(move_direction, this.state.copy.start)
-                this.state.event_source.end = dateAdd(move_direction, this.state.copy.end)
+                let move_direction = value.time.getTime() - this.state.start.getTime()
+                this.state.event_source.start = new Date(move_direction + this.state.copy.start.getTime())
+                this.state.event_source.end = new Date(move_direction + this.state.copy.end.getTime())
             } else if (this.state.status === CWActionStatus.resize) {
-                this.state.event_source.end.time = value.time
+                this.state.event_source.end = new Date(value.time.getTime())
             }
 
             //let container = document.getElementsByClassName("tcw-container-scroll")[0]
