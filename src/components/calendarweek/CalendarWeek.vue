@@ -44,7 +44,7 @@
 // to keep a reference to this component
 let _this
 const CWActionStatus = Object.freeze({resize: 0, drag: 1, none: 2})
-import { enlargeContainerForScrollbar, computeTimeRange, createOffsetDate } from './../utils.js'
+import { enlargeContainerForScrollbar, computeTimeRange, createOffsetDate, arrangeEvents } from './../utils.js'
 import Event from './Event.vue'
 import CalendarCell from './CalendarCell.vue'
 export default {
@@ -68,6 +68,7 @@ export default {
     mounted() {
         enlargeContainerForScrollbar("tcw-container-scroll")
         document.defaultView.addEventListener('resize', this.resize)
+        this.arrangeEvents()
     },
     provide: {
         timeToDisplayable(date) {
@@ -144,7 +145,35 @@ export default {
                 this.state.event_source.end = new Date(value.time.getTime())
             }
 
-            //let container = document.getElementsByClassName("tcw-container-scroll")[0]
+            if (this.state.status != CWActionStatus.none) {
+                this.arrangeEvents()
+            }
+        },
+
+        arrangeEvents () {
+            let temp = {}
+            for (const [i, evt] of this.$refs.events.entries()) {
+                const date = evt.start.getDate()
+                if (!(date in temp)) {
+                    temp[date] = []
+                }
+                temp[date].push({
+                    uid: i,
+                    start: evt.start,
+                    end: evt.end
+                })
+            }
+
+            for (let col in temp) {
+                let result = arrangeEvents(temp[col])
+
+                for (let c of result) {
+                    let event = this.$refs.events[c.uid]
+                    event.column = c.Pos.Nb
+                    event.nbColumn = c.Pos.Sd
+                    event.relativeWidth = c.Pos.Su
+                }
+            }
         },
 
         resize() {

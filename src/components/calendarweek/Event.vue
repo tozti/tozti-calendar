@@ -11,7 +11,20 @@
 import { elementContains } from './../utils.js'
 export default {
     inject: ['timeToDisplayable'],
-    props: ["start", "end", "uid"],
+    props: {
+        start: {
+            type: Date,
+            default: new Date(),
+        },
+        end: {
+            type: Date,
+            default: new Date(),
+        },
+        uid: {
+            type: Number,
+            default: 0
+        },
+    },
     created: function () {
     },
     mounted: function () {
@@ -31,6 +44,9 @@ export default {
 
     data: function () {
         return {
+            column: 0,
+            relativeWidth: 1,
+            nbColumn: 1
         }
     },
 
@@ -39,9 +55,9 @@ export default {
             let disp1 = this.timeToDisplayable(this.start)
             let disp2 = this.timeToDisplayable(this.end)
             this.$el.style.top = disp1.top + "px" 
-            this.$el.style.left = disp1.left + "px"
+            this.$el.style.left = disp1.left + this.column * (disp2.width / this.nbColumn) + "px"
             this.$el.style.height = disp2.top - disp1.top + "px"
-            this.$el.style.width = disp2.width + "px"
+            this.$el.style.width = this.relativeWidth * disp2.width / this.nbColumn + "px"
         },
 
         handleContains(pos) {
@@ -58,6 +74,15 @@ export default {
             this.updateDisplay()
         },
         end: function(x) {
+            this.updateDisplay()
+        },
+        column: function(x) {
+            this.updateDisplay()
+        },
+        nbColumn: function(x) {
+            this.updateDisplay()
+        },
+        relativeWidth: function(x) {
             this.updateDisplay()
         },
     }
