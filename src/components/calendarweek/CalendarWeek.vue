@@ -7,7 +7,7 @@
             <p class="title">{{time.getDate()}}</p>
         </div>
         </div>
-        <div class="tcw-container-scroll" style="position:relative;">
+        <div class="tcw-container-scroll" style="position:relative;" ref="scrollable">
             <div class = "tcw-container-fullcal is-paddingless is-marginless" style="position:relative;">
                 <div class = "tcw-container is-paddingless is-marginless" style="position: relative;">
                     <div v-for="hour in 24" class="tcw-row is-marginless">
@@ -147,6 +147,15 @@ export default {
 
             if (this.state.status != CWActionStatus.none) {
                 this.arrangeEvents()
+
+                // drag the calendar
+                const bound_scroll = this.$refs.scrollable.getBoundingClientRect()
+                if (value.y >= bound_scroll.y + 9/10 * bound_scroll.height) {
+                    this.$refs.scrollable.scrollBy(0, 10) 
+                }
+                if (value.y <= bound_scroll.y + 1/10 * bound_scroll.height) {
+                    this.$refs.scrollable.scrollBy(0, -10) 
+                }
             }
         },
 
