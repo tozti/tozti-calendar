@@ -67,6 +67,7 @@ export default {
     },
     mounted() {
         enlargeContainerForScrollbar("tcw-container-scroll")
+        document.defaultView.addEventListener('resize', this.resize)
     },
     provide: {
         timeToDisplayable(date) {
@@ -99,6 +100,11 @@ export default {
             this.state.status = CWActionStatus.none
             for (let it of this.$refs.events.entries()) {
                 if (it[1].eventContains(value)) {
+                    // visually put one of them in front
+                    for (let temp of this.$refs.events)
+                        temp.$el.style.zIndex=0
+                    it[1].$el.style.zIndex=1
+
                     let event_source = this.eventsTest[it[1].uid]
                     this.state.status = CWActionStatus.drag
                     this.state.id = it[0]
@@ -140,6 +146,13 @@ export default {
 
             //let container = document.getElementsByClassName("tcw-container-scroll")[0]
         },
+
+        resize() {
+            console.log("resize")
+            for (let c of this.$refs.events) {
+                c.updateDisplay()
+            }
+        }
     }
 }
 
