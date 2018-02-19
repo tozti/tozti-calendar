@@ -3,19 +3,17 @@ $tcm-calendar-entry-height: 80px;
 $tcm-calendar-left-margin: 60px;
 
 #tcm-calendar-month {
-    width: 100%;
-    height: 800px;
+    display: flex;
+    flex-direction: column;
 }
 
 #tcm-calendar-month-content {
-    width: 100%;
     height: calc(100% - $tcm-calendar-header-height);
     padding: 0;
     margin: 0;
     display: grid;
     grid-template-columns: $tcm-calendar-left-margin repeat(7, 1fr);
     grid-template-rows: repeat(6, $tcm-calendar-entry-height);
-    overflow-y: scroll;
     position: relative;
 }
 
@@ -39,7 +37,6 @@ $tcm-calendar-left-margin: 60px;
 }
 
 
-
 .tcm-calendar-entry .tcm-calendar-entry-inner {
     height: 100%;
 }
@@ -49,7 +46,7 @@ $tcm-calendar-left-margin: 60px;
 }
 
 .tcm-calendar-title-day {
-    flex: 1;
+    flex: 2;
     flex-grow: 1;
     padding: 0 10px;
     line-height: $tcm-calendar-header-height;
@@ -65,7 +62,6 @@ $tcm-calendar-left-margin: 60px;
 
 
 #tcm-calendar-month-header {
-    width: 100%;
     height: $tcm-calendar-header-height;
     display: flex;
     flex-direction: row;
