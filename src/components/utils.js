@@ -70,7 +70,6 @@ export function createOffsetDate(year, month, day, hour, minutes) {
     return offset
 }
 
-
 export function arrangeEvents(events) {
     // put the input in a format we can manipulate
     let Ev = []
@@ -91,7 +90,9 @@ export function arrangeEvents(events) {
 
 
     var discretStep = 15; // precision d'un quart d'heure
-
+    var i = 0;
+    var j = 0;
+    var k = 0;
 
     var step = 0;
     var eventArray = [];       // tableau contenant les evenement en cours lors d'un quart d'heure.
@@ -100,9 +101,9 @@ export function arrangeEvents(events) {
         eventArray.push([[]]); // la première case sert a donner les positions deja utilisé par un autre evenement.
         step+=discretStep;
     }
-
-    for (let i = 0; i < Ev.length; i++) {
-        for(let j = Ev[i].Start ; j <= Ev[i].End ; j += discretStep) {
+    
+    for (i = 0; i < Ev.length; i++) {
+        for(j = Ev[i].Start ; j < Ev[i].End ; j += discretStep) {
             eventArray[Math.trunc(j/discretStep)].push(Ev[i].Id); // on remplis notre tableau avec les evenements.
         }
     }
@@ -111,15 +112,15 @@ export function arrangeEvents(events) {
     // calcul de la position des evenements
 
 
-    for (let i = 0; i < Ev.length; i++) { // Première boucle sur le nombre d'evenement, place les evenement les un par rapport aux autres
+    for (i = 0; i < Ev.length; i++) { // Première boucle sur le nombre d'evenement, place les evenement les un par rapport aux autres
         var pos = 0;
-        for(let j = Ev[i].Start ; j <= Ev[i].End ; j += discretStep) { // boucle sur la durée des evenements
+        for(j = Ev[i].Start ; j < Ev[i].End ; j += discretStep) { // boucle sur la durée des evenements
             while(eventArray[Math.trunc(j/discretStep)][0].indexOf(pos) != -1) { //boucle sur le nombre d'intersection sur un quart-d'heure.
                 pos++; //si la variable pos est déja utilisé, on incremente pos
                 j = Ev[i].Start; // on reprend notre boucle for a 0 pour bien balayer toute la durée de l'evenement avec notre nouveau pos.
             }
         }
-        for(let j = Ev[i].Start ; j <= Ev[i].End ; j += discretStep) { // boucle sur la durée des evenements
+        for(j = Ev[i].Start ; j < Ev[i].End ; j += discretStep) { // boucle sur la durée des evenements
             eventArray[Math.trunc(j/discretStep)][0].push(pos);
             Ev[i].Pos.Nb = pos;
         }
@@ -127,30 +128,28 @@ export function arrangeEvents(events) {
 
 
     // calcul de la taille des evenements :
-
-
-    for (let i = Ev.length - 1; i >= 0; i--) { // boucle sur le nombre d'evenement, calcul la taille de chaque evenements.
-
-
+    
+    
+    for (i = Ev.length - 1; i >= 0; i--) { // boucle sur le nombre d'evenement, calcul la taille de chaque evenements part 1
         var elemIntersec = Array(Ev.length);
         var taille = 0;
 
-        for(let j = Ev[i].Start ; j <= Ev[i].End ; j += discretStep) { // boucle sur la durée des evenements
-            for(let k = 0 ; k < eventArray[Math.trunc(j/discretStep)][0].length ; k++) { // boucle sur les intersections (position)
+        for(j = Ev[i].Start ; j < Ev[i].End ; j += discretStep) { // boucle sur la durée des evenements
+            for(k = 0 ; k < eventArray[Math.trunc(j/discretStep)][0].length ; k++) { // boucle sur les intersections (position)
                 if(elemIntersec[eventArray[Math.trunc(j/discretStep)][0][k]] != 1) {
                     taille++;
                 }
                 elemIntersec[eventArray[Math.trunc(j/discretStep)][0][k]] = 1;
-            }
-
+            }        
         }
+        Ev[i].Pos.Sd = taille;
+    }
 
-
+    for (i = Ev.length - 1; i >= 0; i--) { // boucle sur le nombre d'evenement, calcul la taille de chaque evenements part 2
         var elemIntersec = Array(Ev.length);
         var minTailleIntersec = 0; 
-
-        for(let j = Ev[i].Start ; j <= Ev[i].End ; j += discretStep) { // boucle sur la durée des evenements
-            for(let k = 1 ; k < eventArray[Math.trunc(j/discretStep)].length ; k++) { // boucle sur les intersections (Id des element qui intersecte)
+        for(j = Ev[i].Start ; j < Ev[i].End ; j += discretStep) { // boucle sur la durée des evenements
+            for(k = 1 ; k < eventArray[Math.trunc(j/discretStep)].length ; k++) { // boucle sur les intersections (Id des element qui intersecte)
                 if(elemIntersec[eventArray[Math.trunc(j/discretStep)][k]] != 1) {
                     if(Ev[eventArray[Math.trunc(j/discretStep)][k]].Pos.Sd > minTailleIntersec) {
                         minTailleIntersec = Ev[eventArray[Math.trunc(j/discretStep)][k]].Pos.Sd;
@@ -158,17 +157,11 @@ export function arrangeEvents(events) {
                 }
                 elemIntersec[eventArray[Math.trunc(j/discretStep)][k]] = 1;
             }
-
         }
-
-        Ev[i].Pos.Init = 1;
-        if(taille > minTailleIntersec){
-            Ev[i].Pos.Sd = taille;
-        }
-        if(taille <= minTailleIntersec){
+        if(Ev[i].Pos.Sd <= minTailleIntersec){
             Ev[i].Pos.Sd = minTailleIntersec;
         }
+        Ev[i].Pos.Init = 1;
     } 
-
     return Ev;
 }
