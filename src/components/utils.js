@@ -43,6 +43,7 @@ export function elementContains(el, pos) {
 export function computeTimeRange(startTime, endTime) {
     let out = []
     let s = startTime
+    s.setHours(0, 0, 0, 0)
     while (s <= endTime) {
         s.setDate(s.getDate() + 1)
         out.push(new Date(s.getTime()))

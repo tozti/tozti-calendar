@@ -66,10 +66,7 @@
             <calendar-week :days="['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']"
                            :start-day="new Date(2018, 2, 18)"
                            :end-day="new Date(2018, 2, 24)"
-                           :events="[{start: new Date(2018, 2, 19, 2, 0, 0, 0), end: new Date(2018, 2, 19, 5, 0, 0, 0)},
-                            {start: new Date(2018, 2, 19, 3, 0, 0, 0), end: new Date(2018, 2, 19, 6, 0, 0, 0)},
-                            {start: new Date(2018, 2, 19, 4, 0, 0, 0), end: new Date(2018, 2, 19, 7, 0, 0, 0)},
-                            {start: new Date(2018, 2, 19, 5, 0, 0, 0), end: new Date(2018, 2, 19, 8, 0, 0, 0)},
+                           :events="[{start: new Date(2018, 2, 19, 2, 0, 0, 0), end: new Date(2018, 2, 20, 5, 0, 0, 0)},
                            ]">
             </calendar-week>
         </template>

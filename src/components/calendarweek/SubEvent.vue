@@ -1,26 +1,20 @@
 <template>
-    <div class="tcw-temp">
-        <sub-event v-for="(part, index) in parts" 
-            :hasHandle="index === parts.length - 1" 
-            :start="part.start" 
-            :end="part.end" 
-            ref="parts" 
-            :id="index"
-            :key="index">
-        {{start}}
-        {{end}}
+    <div class="tcw-event">
         <slot>
         </slot>
-        </sub-event>
+
+        This part:
+        {{this.start}}
+        {{this.end}}
+        <div v-if="hasHandle" class="tcw-handle-resize" ref="handle">
+        </div>
     </div>
 </template>
 
 <script>
 import { elementContains } from './../utils.js'
-import SubEvent from './SubEvent.vue'
 export default {
     inject: ['timeToDisplayable'],
-    components: {SubEvent},
     props: {
         start: {
             type: Date,
@@ -30,10 +24,14 @@ export default {
             type: Date,
             default: new Date(),
         },
-        uid: {
+        hasHandle: {
+            type: Boolean,
+            default: false
+        },
+        id: {
             type: Number,
             default: 0
-        },
+        }
     },
     created: function () {
     },
@@ -57,53 +55,27 @@ export default {
             column: 0,
             relativeWidth: 1,
             nbColumn: 1,
-            parts: [{start: this.start, end: this.end}],
         }
     },
 
     methods: {
         updateDisplay() {
-            let temp = []
-            let current_day = new Date(this.start.getTime())
-            current_day.setHours(1, 0, 0, 0)
-            let end_day = new Date(current_day.getTime())
-            end_day.setDate(end_day.getDate() + 1)
-            end_day.setMinutes(-1)
-
-            let current = new Date(this.start.getTime())
-            while (end_day < this.end) {
-                temp.push({
-                    start: new Date(current.getTime()),
-                    end: new Date(end_day.getTime()),
-                })
-                end_day = new Date(end_day.getTime())
-                end_day.setDate(end_day.getDate() + 1)
-                current_day.setDate(current_day.getDate() + 1)
-                current = new Date(current_day.getTime())
-            }
-            temp.push({
-                start: new Date(current.getTime()),
-                end: new Date(this.end.getTime())
-            })
-            this.parts = temp
+            let disp1 = this.timeToDisplayable(this.start)
+            let disp2 = this.timeToDisplayable(this.end)
+            this.$el.style.top = disp1.top + "px" 
+            this.$el.style.left = disp1.left + this.column * (disp2.width / this.nbColumn) + "px"
+            this.$el.style.height = disp2.top - disp1.top + "px"
+            this.$el.style.width = this.relativeWidth * disp2.width / this.nbColumn + "px"
         },
 
         handleContains(pos) {
-            for (let p of this.$refs.parts) {
-                if (p.handleContains(pos)){
-                    return true
-                }
-            }
+            if (this.hasHandle)
+                return elementContains(this.$refs.handle, pos)
             return false
         },
 
         eventContains(pos) {
-            for (let p of this.$refs.parts) {
-                if (p.eventContains(pos)) {
-                    return true
-                }
-            }
-            return false
+            return elementContains(this.$el, pos)
         },
     },
 
@@ -114,7 +86,7 @@ export default {
         end: function(x) {
             this.updateDisplay()
         },
-        /*column: function(x) {
+        column: function(x) {
             this.updateDisplay()
         },
         nbColumn: function(x) {
@@ -122,7 +94,7 @@ export default {
         },
         relativeWidth: function(x) {
             this.updateDisplay()
-        },*/
+        },
     }
 }
 </script>
@@ -130,7 +102,7 @@ export default {
 <style scoped>
 .tcw-event {
     position: absolute;
-    background-color: blue;
+    background-color: #8eb9ff;
 }
 .tcw-handle-resize {
     position: absolute; 

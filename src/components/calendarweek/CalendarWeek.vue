@@ -78,7 +78,7 @@ export default {
             const cells = _this.$refs.cells
             let cell = null
             for (let c of cells) {
-                if (c.time.getTime() <= date.getTime() && date.getTime() <= c.time.getTime() + c.duration.getTime()) {
+                if (c.time.getHours() == date.getHours() && date.getDate() == c.time.getDate() && date.getMonth() == c.time.getMonth() && date.getFullYear() == c.time.getFullYear()) {
                     cell = c
                 }
             }
