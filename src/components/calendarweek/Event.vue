@@ -1,9 +1,11 @@
 <template>
-    <div style="position:absolute; top:0; left:50px; background-color: blue">
+    <div class="tcw-temp">
+    <div v-for="(part, index) in parts" class="tcw-event" ref="parts">
         <slot>
         </slot>
-        <div class="tcw-handle-resize">
+        <div v-if="index === parts.length - 1" class="tcw-handle-resize" ref="handle">
         </div>
+    </div>
     </div>
 </template>
 
@@ -46,7 +48,8 @@ export default {
         return {
             column: 0,
             relativeWidth: 1,
-            nbColumn: 1
+            nbColumn: 1,
+            parts: [{start: this.start, end: this.end}],
         }
     },
 
@@ -54,18 +57,26 @@ export default {
         updateDisplay() {
             let disp1 = this.timeToDisplayable(this.start)
             let disp2 = this.timeToDisplayable(this.end)
-            this.$el.style.top = disp1.top + "px" 
-            this.$el.style.left = disp1.left + this.column * (disp2.width / this.nbColumn) + "px"
-            this.$el.style.height = disp2.top - disp1.top + "px"
-            this.$el.style.width = this.relativeWidth * disp2.width / this.nbColumn + "px"
+            for (let p of this.$refs.parts) {
+                p.style.top = disp1.top + "px" 
+                p.style.left = disp1.left + this.column * (disp2.width / this.nbColumn) + "px"
+                p.style.height = disp2.top - disp1.top + "px"
+                p.style.width = this.relativeWidth * disp2.width / this.nbColumn + "px"
+            }
         },
 
         handleContains(pos) {
-            return elementContains(this.$el.getElementsByClassName("tcw-handle-resize")[0], pos)
+            console.log(this.$refs)
+            return elementContains(this.$refs.handle[0], pos)
         },
 
         eventContains(pos) {
-            return elementContains(this.$el, pos)
+            for (let p of this.$refs.parts) {
+                if (elementContains(p, pos)) {
+                    return true
+                }
+            }
+            return false
         },
     },
 
@@ -89,7 +100,11 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.tcw-event {
+    position: absolute;
+    background-color: blue;
+}
 .tcw-handle-resize {
     position: absolute; 
     bottom: 0; 
@@ -98,5 +113,14 @@ export default {
     margin: 0;
     padding: 0;
     background-color:red;
+}
+
+.tcw-temp {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border: 1px solid green;
 }
 </style>
