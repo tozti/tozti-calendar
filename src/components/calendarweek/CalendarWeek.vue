@@ -165,25 +165,31 @@ export default {
         arrangeEvents () {
             let temp = {}
             for (const [i, evt] of this.$refs.events.entries()) {
-                const date = evt.start.getDate()
-                if (!(date in temp)) {
-                    temp[date] = []
+                for (const [j, part] of evt.$refs.parts.entries()) {
+                    const key = part.start.getFullYear() 
+                        + "/" + part.start.getMonth() 
+                        + "/" + part.start.getDate()
+                    if (!(key in temp)) {
+                        temp[key] = []
+                    }
+                    temp[key].push({
+                        uid_event: i,
+                        uid_part: j,
+                        start: part.start,
+                        end: part.end
+                    })
                 }
-                temp[date].push({
-                    uid: i,
-                    start: evt.start,
-                    end: evt.end
-                })
             }
 
             for (let col in temp) {
                 let result = arrangeEvents(temp[col])
+                console.log(result.length, col, result)
 
                 for (let c of result) {
-                    let event = this.$refs.events[c.uid]
-                    event.column = c.Pos.Nb
-                    event.nbColumn = c.Pos.Sd
-                    event.relativeWidth = c.Pos.Su
+                    let event_part = this.$refs.events[c.uid_event].$refs.parts[c.uid_part]
+                    event_part.column = c.Pos.Nb
+                    event_part.nbColumn = c.Pos.Sd
+                    event_part.relativeWidth = c.Pos.Su
                 }
             }
         },
@@ -204,7 +210,6 @@ export default {
 
 
 .tcw-container-events {
-    border: 1px solid red;
     position: absolute;
     top: 0;
     left: 0;

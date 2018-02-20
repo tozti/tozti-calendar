@@ -77,7 +77,8 @@ export function arrangeEvents(events) {
     for (let i = 0; i < events.length; ++i) {
         Ev.push({
             Id: i,
-            uid: events[i].uid,
+            uid_event: events[i].uid_event,
+            uid_part: events[i].uid_part,
             Start: Math.floor((events[i].start.getHours() * 60 + events[i].start.getMinutes()) / 15) * 15,
             End: Math.ceil((events[i].end.getHours() * 60 + events[i].end.getMinutes()) / 15) * 15,
             Pos: {

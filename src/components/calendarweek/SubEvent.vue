@@ -96,6 +96,7 @@ export default {
             this.updateDisplay()
         },
         nbColumn: function(x) {
+            console.log("coucou")
             this.updateDisplay()
         },
         relativeWidth: function(x) {
