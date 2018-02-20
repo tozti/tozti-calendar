@@ -62,6 +62,12 @@ export default {
         updateDisplay() {
             let disp1 = this.timeToDisplayable(this.start)
             let disp2 = this.timeToDisplayable(this.end)
+            if (disp1 === null || disp2 === null) {
+                this.$el.style.display = "none"
+                return 
+            } else {
+                this.$el.style.display = "block"
+            }
             this.$el.style.top = disp1.top + "px" 
             this.$el.style.left = disp1.left + this.column * (disp2.width / this.nbColumn) + "px"
             this.$el.style.height = disp2.top - disp1.top + "px"

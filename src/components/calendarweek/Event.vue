@@ -65,7 +65,7 @@ export default {
         updateDisplay() {
             let temp = []
             let current_day = new Date(this.start.getTime())
-            current_day.setHours(1, 0, 0, 0)
+            current_day.setHours(0, 0, 0, 0)
             let end_day = new Date(current_day.getTime())
             end_day.setDate(end_day.getDate() + 1)
             end_day.setMinutes(-1)

@@ -17,7 +17,7 @@
                         <calendar-cell v-for="time in timeRange"
                                        ref = "cells"
                                        :key="time.getTime()" 
-                                       :time="computeCorrectTime(time, hour)"
+                                       :time="computeCorrectTime(time, hour-1)"
                                        :duration="new Date(durationCell.getTime())"
                                        v-on:click-down="cellSelected($event)"
                                        v-on:click-move="cellDrag($event)"
@@ -78,7 +78,10 @@ export default {
             const cells = _this.$refs.cells
             let cell = null
             for (let c of cells) {
-                if (c.time.getHours() == date.getHours() && date.getDate() == c.time.getDate() && date.getMonth() == c.time.getMonth() && date.getFullYear() == c.time.getFullYear()) {
+                if (c.time.getHours() == date.getHours() 
+                    && date.getDate() == c.time.getDate() 
+                    && date.getMonth() == c.time.getMonth() 
+                    && date.getFullYear() == c.time.getFullYear()) {
                     cell = c
                 }
             }
