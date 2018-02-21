@@ -7,10 +7,28 @@
             ref="parts" 
             :id="index"
             :key="index">
-        {{start}}
-        {{end}}
-        <slot>
-        </slot>
+
+            <div class = "message is-small is-info" style="overflow:hidden; height:100%">      
+                    <b><small>14h</small></b>
+                <div style="max-height:18px; height: calc(100% - 60px); overflow:hidden">
+                    <b>EventName</b>
+                </div>
+                <div style="max-height:18px; height: calc(100% - 75px); overflow:hidden">
+                    AssociationName
+                </div>
+                <div style="height: calc(100% - 95px); overflow:hidden; font-size : smaller">
+                    <small>Excogitatum est super his, ut homines quidam ignoti, vilitate ipsa parum cavendi ad colligendos rumores per Antiochiae latera cuncta destinarentur relaturi quae audirent. hi peragranter et dissimulanter honoratorum circulis adsistendo pervadendoque divites domus egentium habitu quicquid noscere poterant vel audire latenter intromissi per posticas in regiam nuntiabant, id observantes conspiratione concordi, ut fingerent quaedam et cognita duplicarent in peius, laudes vero supprimerent Caesaris, quas invitis conpluribus formido malorum inpendentium exprimebat.</small> <br/>
+                    <span class="tag is-dark"><small>Label 1</small></span>
+                    <span class="tag is-dark"><small>Label 2</small></span>
+                </div>
+        
+        
+                <div style ="text-align:bottom; position:absolute; left:0px; bottom:25px">
+                    <b><small>17h</small></b>
+                </div>
+        
+
+            </div>
         </sub-event>
     </div>
 </template>
