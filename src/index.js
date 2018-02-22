@@ -1,8 +1,7 @@
-import Hello from './components/App.vue';
+import App from './components/App.vue';
 
 
-// add a new route with highest priority
-tozti.routes.unshift(
-  { path: '/calendar', component: Hello }
-)
+tozti.addRoutes([
+ { path: '/calendar', component: App }
+])
 tozti.addMenuItem("Calendar", "/calendar", { icon: 'nc-calendar-60' })
