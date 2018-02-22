@@ -2,8 +2,8 @@
     <section>
         <div style="margin-bottom: 30px">
             <template>
-	        <view-event>
-	        </view-event>
+	        <modify-event>
+	        </modify-event>
 	    </template>
         </div>
 
@@ -87,14 +87,14 @@ import ModalForm from './EventCreationModal.vue'
 import CalendarWeek from './CalendarWeek.vue'
 import CalendarDay from './CalendarDay.vue'
 import CalendarMonth from './CalendarMonth.vue'
-import ViewEvent from './ViewEvent.vue'
+import ModifyEvent from './ModifyEvent.vue'
 export default {
     components: {
         ModalForm,
         CalendarWeek,
         CalendarMonth,
         CalendarDay,
-        ViewEvent
+        ModifyEvent
     },
     data() {
         return {
