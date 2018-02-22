@@ -59,15 +59,15 @@
         </b-modal>
 
         <template v-if="scaleCalendar===0">
-            <calendar-day>
+            <calendar-day style="width: 100%">
             </calendar-day>
         </template>
         <template v-else-if="scaleCalendar===1">
-            <calendar-week>
+            <calendar-week style="width: 100%">
             </calendar-week>
         </template>
         <template v-else>
-            <calendar-month>
+            <calendar-month style="width: 100%">
             </calendar-month>
         </template>
     </section>
