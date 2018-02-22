@@ -7,6 +7,8 @@
 	        </view-event>
 	    </template>
         </div>
+
+	<hr>
 	
         <div style="margin-bottom: 30px">
             <template>
