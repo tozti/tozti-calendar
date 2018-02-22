@@ -1,5 +1,7 @@
 <template>
-    <section>
+    <section style="height: 100%">
+        <div class="tc-content-wrapper">
+            <div class="tc-content">
         <nav class="level">
             <div class="level-left">
                 <p class="level-item"><a class="button">prev</a></p>
@@ -58,18 +60,22 @@
             <modal-form v-bind="formProps"></modal-form>
         </b-modal>
 
-        <template v-if="scaleCalendar===0">
-            <calendar-day style="width: 100%">
-            </calendar-day>
-        </template>
-        <template v-else-if="scaleCalendar===1">
-            <calendar-week style="width: 100%">
-            </calendar-week>
-        </template>
-        <template v-else>
-            <calendar-month style="width: 100%">
-            </calendar-month>
-        </template>
+                <template v-if="scaleCalendar===0">
+                    <calendar-day style="width: 100%">
+                    </calendar-day>
+                </template>
+                <template v-else-if="scaleCalendar===1">
+                    <calendar-week style="width: 100%">
+                    </calendar-week>
+                </template>
+                <template v-else>
+                    <calendar-month style="width: 100%">
+                    </calendar-month>
+                </template>
+            </div>
+            <sidebar-menu class = "tc-sidebar">
+            </sidebar-menu>
+        </div>
     </section>
 </template>
 
@@ -78,6 +84,7 @@ import ModalForm from './EventCreationModal.vue'
 import CalendarWeek from './CalendarWeek.vue'
 import CalendarDay from './CalendarDay.vue'
 import CalendarMonth from './CalendarMonth.vue'
+import SidebarMenu from './SidebarMenu.vue'
 
 export default {
     components: {
@@ -85,6 +92,7 @@ export default {
         CalendarWeek,
         CalendarMonth,
         CalendarDay,
+        SidebarMenu,
     },
     data() {
         return {
@@ -98,3 +106,31 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.tc-content-wrapper {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+.tc-content {
+    flex: auto;
+}
+
+.tc-sidebar {
+    margin: 0;
+    padding: 0;
+    width: 100px;
+    height: 100%;
+    
+    position: relative;
+    right: -20px;
+
+    transition: 2s all;
+}
+.tc-sidebar:hover{
+    width: 400px;
+}
+
+</style>
