@@ -1,5 +1,13 @@
 <template>
     <section>
+
+	<div style="margin-bottom: 30px">
+            <template>
+	        <view-event>
+	        </view-event>
+	    </template>
+        </div>
+	
         <div style="margin-bottom: 30px">
             <template>
 	        <modify-event>
@@ -88,13 +96,15 @@ import CalendarWeek from './CalendarWeek.vue'
 import CalendarDay from './CalendarDay.vue'
 import CalendarMonth from './CalendarMonth.vue'
 import ModifyEvent from './ModifyEvent.vue'
+import ViewEvent from './ViewEvent.vue'
 export default {
     components: {
         ModalForm,
         CalendarWeek,
         CalendarMonth,
         CalendarDay,
-        ModifyEvent
+        ModifyEvent,
+        ViewEvent
     },
     data() {
         return {
