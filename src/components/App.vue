@@ -1,5 +1,5 @@
 <template>
-    <section style="height: 100%">
+    <section class="fixed-content" style="padding: 20px">
         <div class="tc-content-wrapper">
             <div class="tc-content">
         <nav class="level">
@@ -17,7 +17,7 @@
                 </button>
                 </p>
                 <p class="level-item">
-                <button class="button is-primary">
+                <button class="button is-primary" @click="add_event_opened=true">
                     Plus d'informations
                 </button>
                 </p>
@@ -73,7 +73,8 @@
                     </calendar-month>
                 </template>
             </div>
-            <sidebar-menu class = "tc-sidebar">
+            <sidebar-menu class = "tc-sidebar" title="Ajouter" :opened="add_event_opened" @closed="add_event_opened=false">
+                bla
             </sidebar-menu>
         </div>
     </section>
@@ -102,12 +103,13 @@ export default {
                 password: 'testing'
             },
             scaleCalendar: 1,
+            add_event_opened: true,
         }
     }
 }
 </script>
 
-<style scoped>
+<style>
 .tc-content-wrapper {
     display: flex;
     flex-direction: row;
@@ -119,18 +121,8 @@ export default {
 }
 
 .tc-sidebar {
-    margin: 0;
-    padding: 0;
-    width: 100px;
-    height: 100%;
-    
     position: relative;
     right: -20px;
-
-    transition: 2s all;
-}
-.tc-sidebar:hover{
-    width: 400px;
 }
 
 </style>
