@@ -33,21 +33,8 @@ export default {
             default: 0
         }
     },
-    created: function () {
-    },
     mounted: function () {
-        // bug because the dom is loaded before everything is here
         this.updateDisplay()
-        /*document.documentElement.addEventListener('mousemove', this.handleMove, true)
-        document.documentElement.addEventListener('mousedown', this.deselect, true)
-        document.documentElement.addEventListener('mouseup', this.handleUp, true)
-        */
-    },
-    beforeDestroy: function () {
-       /*document.documentElement.removeEventListener('mousemove', this.handleMove, true)
-        document.documentElement.removeEventListener('mousedown', this.deselect, true)
-        document.documentElement.removeEventListener('mouseup', this.handleUp, true)
-        */
     },
 
     data: function () {
@@ -64,20 +51,17 @@ export default {
             let disp2 = this.timeToDisplayable(this.end)
             if (disp1 === null || disp2 === null) {
                 this.$el.style.display = "none"
-                return 
             } else {
                 this.$el.style.display = "block"
+                this.$el.style.top = disp1.top + "px" 
+                this.$el.style.left = disp1.left + this.column * (disp2.width / this.nbColumn) + "px"
+                this.$el.style.height = disp2.top - disp1.top + "px"
+                this.$el.style.width = this.relativeWidth * disp2.width / this.nbColumn + "px"
             }
-            this.$el.style.top = disp1.top + "px" 
-            this.$el.style.left = disp1.left + this.column * (disp2.width / this.nbColumn) + "px"
-            this.$el.style.height = disp2.top - disp1.top + "px"
-            this.$el.style.width = this.relativeWidth * disp2.width / this.nbColumn + "px"
         },
 
         handleContains(pos) {
-            if (this.hasHandle)
-                return elementContains(this.$refs.handle, pos)
-            return false
+            return this.hasHandle && elementContains(this.$refs.handle, pos)
         },
 
         eventContains(pos) {
@@ -96,7 +80,6 @@ export default {
             this.updateDisplay()
         },
         nbColumn: function(x) {
-            console.log("coucou")
             this.updateDisplay()
         },
         relativeWidth: function(x) {
@@ -119,14 +102,5 @@ export default {
     margin: 0;
     padding: 0;
     background-color:red;
-}
-
-.tcw-temp {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border: 1px solid green;
 }
 </style>

@@ -4,13 +4,14 @@
 </template>
 
 <script>
-import { pauseEvent, getMousePos } from './../utils.js'
+import { pauseEvent, getMousePos, createOffsetDate } from './../utils.js'
 export default {
     data() {
         return {
+            duration: createOffsetDate(0, 0, 0, 1, 0)
         }
     },
-    props: ['time', 'duration'],
+    props: ['time'],
     components: {
     },
     methods: {
@@ -32,8 +33,7 @@ export default {
             let fraction = (pos.y - bounds.y) / bounds.height
             let start_time = this.time.getTime()
             let end_time = this.time.getTime() + this.duration.getTime()
-            let exact_time =  (fraction * this.duration.getTime() | 0) + this.time.getTime()
-            let time = new Date(exact_time)
+            let time =  new Date((fraction * this.duration.getTime() | 0) + this.time.getTime())
             time.setMinutes((time.getMinutes() / 15 | 0) * 15)
             time.setSeconds(0, 0)
             

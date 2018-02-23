@@ -7,18 +7,18 @@
             <p class="title">{{time.getDate()}}</p>
         </div>
         </div>
-        <div class="tcw-container-scroll" style="position:relative;" ref="scrollable">
+        <div class="tcw-container-scroll" style="position:relative;" ref="scrollable" 
+            @mouseleave="stopAction()">
             <div class = "tcw-container-fullcal is-paddingless is-marginless" style="position:relative;">
                 <div class = "tcw-container is-paddingless is-marginless" style="position: relative;">
                     <div v-for="hour in 24" class="tcw-row is-marginless">
-                        <div class="tcw-spacer tcw-inner-cal twc-time">
+                        <div class="tcw-spacer tcw-inner-cal tcw-time">
                             <p> {{hour}} </p>
                         </div>
                         <calendar-cell v-for="time in timeRange"
                                        ref = "cells"
                                        :key="time.getTime()" 
                                        :time="computeCorrectTime(time, hour-1)"
-                                       :duration="new Date(durationCell.getTime())"
                                        v-on:click-down="cellSelected($event)"
                                        v-on:click-move="cellDrag($event)"
                                        v-on:click-up="cellUnselected($event)"
@@ -44,16 +44,34 @@
 // to keep a reference to this component
 let _this
 const CWActionStatus = Object.freeze({resize: 0, drag: 1, none: 2})
-import { enlargeContainerForScrollbar, computeTimeRange, createOffsetDate, arrangeEvents } from './../utils.js'
+import { enlargeContainerForScrollbar, computeTimeRange, arrangeEvents } from './../utils.js'
 import Event from './Event.vue'
 import CalendarCell from './CalendarCell.vue'
 export default {
-    props: ['start-day', 'end-day', 'events'],
+    props: ['start', 'end', 'events'],
     data() {
         return {
             eventsTest : this.events,
-            timeRange : computeTimeRange(this.startDay, this.endDay),
-            durationCell : createOffsetDate(0, 0, 0, 1, 0)
+            state : {
+                status: CWActionStatus.none
+            }
+        }
+    },
+    computed: {
+        startDay: function() {
+            let temp = new Date(this.start.getTime())
+            temp.setHours(0, 0, 0, 0)
+            return temp
+        },
+        endDay: function() {
+            let temp = new Date(this.end.getTime())
+            temp.setHours(0, 0, 0, 0)
+            temp.setDate(temp.getDate()+1)
+            temp.setMinutes(-1)
+            return temp
+        },
+        timeRange : function() {
+            return computeTimeRange(this.startDay, this.endDay)
         }
     },
     created() {
@@ -72,11 +90,9 @@ export default {
     },
     provide: {
         timeToDisplayable(date) {
-            const day = date.getDate()
-            const hour = date.getHours()
-            const minutes = date.getMinutes()
             const cells = _this.$refs.cells
             let cell = null
+            // TODO could be optimized
             for (let c of cells) {
                 if (c.time.getHours() == date.getHours() 
                     && date.getDate() == c.time.getDate() 
@@ -89,7 +105,7 @@ export default {
                 return null
             return {
                 //put offset back
-                'top': cell.$el.offsetTop + (minutes / 60) * cell.$el.offsetHeight,
+                'top': cell.$el.offsetTop + (date.getMinutes() / 60) * cell.$el.offsetHeight,
                 'left': cell.$el.offsetLeft,
                 'width': cell.$el.offsetWidth,
                 'height': cell.$el.offsetHeight
@@ -97,22 +113,19 @@ export default {
         }  
     },
     methods: {
-        getCellSize : () => {
-            return 50
-        },
         cellSelected(value) {
             this.state.status = CWActionStatus.none
-            for (let it of this.$refs.events.entries()) {
-                if (it[1].eventContains(value)) {
+            for (let [i, event] of this.$refs.events.entries()) {
+                if (event.eventContains(value)) {
                     // visually put one of them in front
                     for (let temp of this.$refs.events)
                         temp.$el.style.zIndex=0
-                    it[1].$el.style.zIndex=1
+                    event.$el.style.zIndex=1
 
-                    let event_source = this.eventsTest[it[1].uid]
+                    let event_source = this.eventsTest[event.uid]
                     this.state.status = CWActionStatus.drag
-                    this.state.id = it[0]
-                    this.state.ref = it[1]
+                    this.state.id = i
+                    this.state.ref = event
                     this.state.event_source = event_source
 
                     this.state.copy = {
@@ -122,7 +135,7 @@ export default {
 
                     this.state.start = new Date(value.time.getTime())
 
-                    if (it[1].handleContains(value)) {
+                    if (event.handleContains(value)) {
                         this.state.status = CWActionStatus.resize
                     }
                 }
@@ -136,7 +149,7 @@ export default {
         },
 
         cellUnselected(value) {
-            this.state.status = CWActionStatus.none
+            this.stopAction()
         },
 
         cellDrag(value) {
@@ -151,7 +164,7 @@ export default {
             if (this.state.status != CWActionStatus.none) {
                 this.arrangeEvents()
 
-                // drag the calendar
+                // scroll the calendar
                 const bound_scroll = this.$refs.scrollable.getBoundingClientRect()
                 if (value.y >= bound_scroll.y + 9/10 * bound_scroll.height) {
                     this.$refs.scrollable.scrollBy(0, 10) 
@@ -160,6 +173,11 @@ export default {
                     this.$refs.scrollable.scrollBy(0, -10) 
                 }
             }
+        },
+
+        stopAction() {
+            this.state.status = CWActionStatus.none
+            console.log("stopping everything")
         },
 
         arrangeEvents () {
@@ -183,8 +201,6 @@ export default {
 
             for (let col in temp) {
                 let result = arrangeEvents(temp[col])
-                console.log(result.length, col, result)
-
                 for (let c of result) {
                     let event_part = this.$refs.events[c.uid_event].$refs.parts[c.uid_part]
                     event_part.column = c.Pos.Nb
@@ -195,7 +211,6 @@ export default {
         },
 
         resize() {
-            console.log("resize")
             for (let c of this.$refs.events) {
                 c.updateDisplay()
             }
@@ -260,23 +275,7 @@ margin-right: 0px;
     /* to display events in a "flex" way, ie several events can be displayed*/
     display: flex;
 }
-
-.event {
-    margin-top: 25%;
-    position: relative;
-    height: 200px;
-    background-color: blue;
-    padding: 0;
-    margin: 0;
-
-    /* events in flex way*/
-    flex-basis: 0;
-    flex-grow: 1;
-    flex-shrink: 1;
-
-}
-
-.twc-time {
+.tcw-time {
     align-self: flex-end;
     text-align: right;
     padding-right: 10px;
