@@ -91,7 +91,7 @@ export default {
     },
     mounted() {
         enlargeContainerForScrollbar("tcw-container-scroll")
-        document.defaultView.addEventListener('resize', this.resize)
+        document.defaultView.addEventListener('resize', this.updateEventsRendering)
         this.arrangeEvents()
     },
     provide: {
@@ -100,7 +100,7 @@ export default {
             let cell = null
             // TODO could be optimized
             for (let c of cells) {
-                if (c.time.getHours() == date.getHours() 
+                if (date.getHours() == c.time.getHours() 
                     && date.getDate() == c.time.getDate() 
                     && date.getMonth() == c.time.getMonth() 
                     && date.getFullYear() == c.time.getFullYear()) {
@@ -118,7 +118,20 @@ export default {
             }
         }  
     },
+
+    watch: {
+        timeRange : function () {
+            this.updateEventsRendering()
+        }
+    },
+
     methods: {
+        updateEventsRendering() {
+            for (let c of this.$refs.events) {
+                c.computeSubdivision()
+            }
+        },
+
         cellSelected(value) {
             this.state.status = CWActionStatus.none
             for (let [i, event] of this.$refs.events.entries()) {
@@ -159,12 +172,20 @@ export default {
         cellDrag(value) {
             if (this.state.status === CWActionStatus.drag) {
                 let move_direction = value.time.getTime() - this.state.start.getTime()
-                this.$emit("update", {uid: this.state.uid,
-                    content: {start: new Date(move_direction + this.state.copy.start.getTime()),
-                        end: new Date(move_direction + this.state.copy.end.getTime())}})
+                this.$emit("update", {
+                    uid: this.state.uid,
+                    content: {
+                        start: new Date(move_direction + this.state.copy.start.getTime()),
+                        end: new Date(move_direction + this.state.copy.end.getTime())
+                    }
+                })
             } else if (this.state.status === CWActionStatus.resize) {
-                this.$emit("update", {uid: this.state.uid,
-                    content: {end: new Date(value.time.getTime())}})
+                this.$emit("update", {
+                    uid: this.state.uid,
+                    content: {
+                        end: new Date(value.time.getTime())
+                    }
+                })
             }
 
             if (this.state.status != CWActionStatus.none) {
@@ -215,12 +236,6 @@ export default {
                 }
             }
         },
-
-        resize() {
-            for (let c of this.$refs.events) {
-                c.updateDisplay()
-            }
-        }
     }
 }
 

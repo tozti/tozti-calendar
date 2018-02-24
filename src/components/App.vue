@@ -98,7 +98,7 @@ export default {
                 password: 'testing'
             },
             scaleCalendar: 1,
-            week: createOffsetDate(0, 0, 7, 0, 0),
+            week: createOffsetDate(0, 0, 6, 0, 0),
             offset_calendar: new Date(2018, 2, 18),
             events: [{start: new Date(2018, 2, 19, 2, 0, 0, 0), end: new Date(2018, 2, 20, 5, 0, 0, 0), uid:0},
                            {start: new Date(2018, 2, 21, 3, 0, 0, 0), end: new Date(2018, 2, 21, 8, 0, 0, 0), uid:1}]
