@@ -25,7 +25,7 @@
 	  <div v-if="recurrent">
 		<b-field label="Date de fin">
           <b-datepicker
-			placeholder="optionel..."
+			placeholder="optionnel..."
 			icon="calendar-today"
 			:min-date="time">
           </b-datepicker>
