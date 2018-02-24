@@ -2,8 +2,8 @@
     <section style="width:100%;">
         <nav class="level">
             <div class="level-left">
-                <p class="level-item"><a class="button">prev</a></p>
-                <p class="level-item"><a class="button">next</a></p>
+                <p class="level-item"><a class="button" @click="offset_calendar=new Date(offset_calendar.getTime() - week.getTime())">prev</a></p>
+                <p class="level-item"><a class="button" @click="offset_calendar=new Date(offset_calendar.getTime() + week.getTime())">next</a></p>
             </div>
 
 
@@ -63,8 +63,8 @@
             </calendar-day>
         </template>
         <template v-else-if="scaleCalendar===1">
-            <calendar-week :start="new Date(2018, 2, 18)"
-                           :end="new Date(2018, 2, 24)"
+            <calendar-week :start="offset_calendar"
+                           :end="new Date((offset_calendar).getTime() + week.getTime())"
                            :events="[{start: new Date(2018, 2, 19, 2, 0, 0, 0), end: new Date(2018, 2, 20, 5, 0, 0, 0)},
                                      {start: new Date(2018, 2, 21, 3, 0, 0, 0), end: new Date(2018, 2, 21, 8, 0, 0, 0)}]">
             </calendar-week>
@@ -81,6 +81,7 @@ import ModalForm from './EventCreationModal.vue'
 import CalendarWeek from './calendarweek/CalendarWeek.vue'
 import CalendarDay from './CalendarDay.vue'
 import CalendarMonth from './CalendarMonth.vue'
+import { createOffsetDate } from './utils.js'
 
 export default {
     components: {
@@ -97,6 +98,8 @@ export default {
                 password: 'testing'
             },
             scaleCalendar: 1,
+            week: createOffsetDate(0, 0, 7, 0, 0),
+            offset_calendar: new Date(2018, 2, 18),
         }
     }
 }

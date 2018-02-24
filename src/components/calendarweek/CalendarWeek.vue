@@ -27,7 +27,7 @@
                     </div> 
                 </div>
                 <div class="tcw-container-events">
-                    <Event v-for="(event, id) in eventsTest" 
+                    <Event v-for="(event, id) in filteredEvents" 
                            ref = "events"
                            :key="id"
                            :uid="id"
@@ -58,6 +58,13 @@ export default {
         }
     },
     computed: {
+        filteredEvents : function() {
+            return this.events.filter(
+                event => {
+                    return event.start <= this.end && this.start <= event.end
+                }
+            )
+        },
         startDay: function() {
             let temp = new Date(this.start.getTime())
             temp.setHours(0, 0, 0, 0)

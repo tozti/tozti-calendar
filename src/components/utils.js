@@ -60,7 +60,7 @@ export function createOffsetDate(year, month, day, hour, minutes) {
         offset.setMonth(offset.getMonth() + month)
     }
     if (day != 0) {
-        offset.setDate(offset.getDate() + ay)
+        offset.setDate(offset.getDate() + day)
     }
     if (hour != 0) {
         offset.setHours(offset.getHours() + hour)
