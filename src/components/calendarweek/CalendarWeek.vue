@@ -30,7 +30,7 @@
                     <Event v-for="(event, id) in filteredEvents" 
                            ref = "events"
                            :key="id"
-                           :uid="id"
+                           :uid="event.uid"
                            :start="event.start" 
                            :end="event.end">
                     </Event>
@@ -51,7 +51,6 @@ export default {
     props: ['start', 'end', 'events'],
     data() {
         return {
-            eventsTest : this.events,
             state : {
                 status: CWActionStatus.none
             }
@@ -129,15 +128,13 @@ export default {
                         temp.$el.style.zIndex=0
                     event.$el.style.zIndex=1
 
-                    let event_source = this.eventsTest[event.uid]
                     this.state.status = CWActionStatus.drag
-                    this.state.id = i
+                    this.state.uid = event.uid
                     this.state.ref = event
-                    this.state.event_source = event_source
 
                     this.state.copy = {
-                        start: new Date(event_source.start.getTime()),
-                        end: new Date(event_source.end.getTime())
+                        start: new Date(event.start.getTime()),
+                        end: new Date(event.end.getTime())
                     }
 
                     this.state.start = new Date(value.time.getTime())
@@ -162,10 +159,12 @@ export default {
         cellDrag(value) {
             if (this.state.status === CWActionStatus.drag) {
                 let move_direction = value.time.getTime() - this.state.start.getTime()
-                this.state.event_source.start = new Date(move_direction + this.state.copy.start.getTime())
-                this.state.event_source.end = new Date(move_direction + this.state.copy.end.getTime())
+                this.$emit("update", {uid: this.state.uid,
+                    content: {start: new Date(move_direction + this.state.copy.start.getTime()),
+                        end: new Date(move_direction + this.state.copy.end.getTime())}})
             } else if (this.state.status === CWActionStatus.resize) {
-                this.state.event_source.end = new Date(value.time.getTime())
+                this.$emit("update", {uid: this.state.uid,
+                    content: {end: new Date(value.time.getTime())}})
             }
 
             if (this.state.status != CWActionStatus.none) {
