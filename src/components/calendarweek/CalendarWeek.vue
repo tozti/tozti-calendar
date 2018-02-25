@@ -1,5 +1,5 @@
 <template>
-    <section >
+    <section>
         <div class="tcw-row is-marginless">
             <div class="tcw-inner-cal tcw-spacer">
             </div>

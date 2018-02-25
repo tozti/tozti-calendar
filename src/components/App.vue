@@ -64,7 +64,8 @@
                     <calendar-week :start="offset_calendar"
                           :end="new Date((offset_calendar).getTime() + day.getTime() - day.getTime())"
                           v-on:update="updateEvent($event)"
-                          :events="events">
+                          :events="events"
+                          ref="calendar">
                     </calendar-week>
                 </template>
                 <template v-else-if="scaleCalendar===1">
@@ -72,7 +73,8 @@
                           :end="new Date((offset_calendar).getTime() + week.getTime() - day.getTime())"
                           v-on:update="updateEvent($event)"
                           v-on:zoom-in="zoomin($event)"
-                          :events="events">
+                          :events="events"
+                          ref="calendar">
                     </calendar-week>
                 </template>
                 <template v-else>
@@ -80,7 +82,10 @@
                     </calendar-month>
                 </template>
             </div>
-            <sidebar-menu class = "tc-sidebar" title="Ajouter" :opened="add_event_opened" @closed="add_event_opened=false">
+            <sidebar-menu class = "tc-sidebar" 
+                          title="Ajouter" 
+                          :opened="add_event_opened" 
+                          @closed="sidebarClosed(); add_event_opened=false">
                 bla
             </sidebar-menu>
         </div>
@@ -150,8 +155,16 @@ export default {
             if (this.scaleCalendar < 0)
                 this.scaleCalendar = 0
             this.offset_calendar = focus_day
+        },
+
+        sidebarClosed() {
+            if (this.$refs.calendar) {
+                Vue.nextTick().then(() => {
+                    this.$refs.calendar.updateEventsRendering()
+                })
+            }
         }
-    }
+    }   
 }
 </script>
 
