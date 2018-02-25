@@ -52,14 +52,23 @@
       <b-field label="Description">
         <b-input maxlength="200" type="textarea" v-model="description"></b-input>
       </b-field>
+
+	  <b-field label="Couleur">
+		<div>
+		  <swatches v-model="color" />
+		</div>
+	  </b-field>
       
 	</div>
 </template>
 
 <script>
 
+import Swatches from 'vue-swatches'
+import "vue-swatches/dist/vue-swatches.min.css"
+
 export default {
-    
+	components: { Swatches },    
     data(){
         return {
         	title:"Pinata Party",
@@ -71,6 +80,7 @@ export default {
         	[{"name":"AliENS"},{"name":"BDE"},{"name":"AS"},{"name":"ArcENSiel"},{"name":"Unknown"}],
         	allowNew:false,
 		    time: new Date(),
+			color: '#1CA085',
         }
     }
 }
