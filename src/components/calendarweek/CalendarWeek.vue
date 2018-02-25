@@ -30,7 +30,7 @@
                     <Event v-for="(event, id) in filteredEvents" 
                            ref = "events"
                            :key="id"
-                           :uid="event.uid"
+                           :id="event.id"
                            :start="event.start" 
                            :end="event.end">
                     </Event>
@@ -143,7 +143,7 @@ export default {
                     event.$el.style.zIndex=1
 
                     this.state.status = CWActionStatus.drag
-                    this.state.uid = event.uid
+                    this.state.id = event.id
                     this.state.ref = event
 
                     this.state.copy = {
@@ -176,7 +176,7 @@ export default {
             if (this.state.status === CWActionStatus.drag) {
                 let move_direction = value.time.getTime() - this.state.start.getTime()
                 this.$emit("update", {
-                    uid: this.state.uid,
+                    id: this.state.id,
                     content: {
                         start: new Date(move_direction + this.state.copy.start.getTime()),
                         end: new Date(move_direction + this.state.copy.end.getTime())
@@ -184,7 +184,7 @@ export default {
                 })
             } else if (this.state.status === CWActionStatus.resize) {
                 this.$emit("update", {
-                    uid: this.state.uid,
+                    id: this.state.id,
                     content: {
                         end: new Date(value.time.getTime())
                     }

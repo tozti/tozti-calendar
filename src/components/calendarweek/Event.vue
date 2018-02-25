@@ -27,9 +27,7 @@
 <script>
 import { elementContains } from './../utils.js'
 import SubEvent from './SubEvent.vue'
-import { eventMixin } from './../EventMixin.js'
 export default {
-    mixins: ['eventMixin'],
     inject: ['timeToDisplayable'],
     components: {SubEvent},
     props: {
@@ -41,7 +39,7 @@ export default {
             type: Date,
             default: new Date(),
         },
-        uid: {
+        id: {
             type: Number,
             default: 0
         },

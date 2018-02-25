@@ -124,14 +124,34 @@ export default {
             week: createOffsetDate(0, 0, 7, 0, 0),
             day: createOffsetDate(0, 0, 1, 0, 0),
             offset_calendar: new Date(2018, 2, 18),
-            events: [{start: new Date(2018, 2, 19, 2, 0, 0, 0), end: new Date(2018, 2, 20, 5, 0, 0, 0), uid:0},
-                {start: new Date(2018, 2, 21, 3, 0, 0, 0), end: new Date(2018, 2, 21, 8, 0, 0, 0), uid:1}]
+            events: [
+                {
+                    start: new Date(2018, 2, 19, 2, 0, 0, 0), 
+                    end: new Date(2018, 2, 20, 5, 0, 0, 0), 
+                    id:0,
+                    title: "bar",
+                    place: "bar",
+                    description: "bar",
+                    display_color: "red",
+                    groups: [],
+                },
+                {
+                    start: new Date(2018, 2, 21, 3, 0, 0, 0), 
+                    end: new Date(2018, 2, 21, 8, 0, 0, 0), 
+                    id:1,
+                    title: "foo",
+                    place: "foo",
+                    description: "foo",
+                    display_color: "red",
+                    groups: [],
+                }
+            ]
         }
     },
     methods: {
         updateEvent(infos) {
             let event = this.events.find(evt => {
-                return evt.uid == infos.uid
+                return evt.id == infos.id
             })
             for (const el in infos.content) {
                 event[el] = infos.content[el]
