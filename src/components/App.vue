@@ -62,6 +62,7 @@
                 <template v-if="scaleCalendar===0">
                     <calendar-week :start="offset_calendar"
                           :end="new Date((offset_calendar).getTime() + day.getTime() - day.getTime())"
+                          v-on:view-event="viewEvent($event)"
                           v-on:update="updateEvent($event)"
                           :events="events"
                           ref="calendar">
@@ -70,6 +71,7 @@
                 <template v-else-if="scaleCalendar===1">
                     <calendar-week :start="offset_calendar"
                           :end="new Date((offset_calendar).getTime() + week.getTime() - day.getTime())"
+                          v-on:view-event="viewEvent($event)"
                           v-on:update="updateEvent($event)"
                           v-on:zoom-in="zoomin($event)"
                           :events="events"
@@ -85,7 +87,7 @@
                           title="Ajouter" 
                           :opened="add_event_opened" 
                           @closed="sidebarClosed(); add_event_opened=false">
-                <view-event>
+                <view-event v-bind="viewed_event">
                 </view-event>
             </sidebar-menu>
         </div>
@@ -124,6 +126,7 @@ export default {
             week: createOffsetDate(0, 0, 7, 0, 0),
             day: createOffsetDate(0, 0, 1, 0, 0),
             offset_calendar: new Date(2018, 2, 18),
+            viewed_event: {},
             events: [
                 {
                     start: new Date(2018, 2, 19, 2, 0, 0, 0), 
@@ -187,6 +190,13 @@ export default {
                     this.$refs.calendar.updateEventsRendering()
                 })
             }
+        },
+
+        viewEvent(id) {
+            this.viewed_event = this.events.find(evt => {
+                return evt.id == id
+            })
+            this.add_event_opened = true
         }
     }   
 }

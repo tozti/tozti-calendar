@@ -1,5 +1,5 @@
 <template>
-    <div @mousedown="mousedown" @mousemove="mousemove" @mouseup="mouseup">
+    <div @mousedown="mousedown" @mousemove="mousemove" @mouseup="mouseup" @dblclick="dblclick">
     </div>
 </template>
 
@@ -26,6 +26,10 @@ export default {
         mouseup(e) {
             pauseEvent(e)
             this.$emit('click-up', this.computeInformations(getMousePos(e)))
+        },
+        dblclick(e) {
+            pauseEvent(e)
+            this.$emit('click-double', this.computeInformations(getMousePos(e)))
         },
 
         computeInformations(pos) {

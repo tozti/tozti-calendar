@@ -19,6 +19,7 @@
                                        ref = "cells"
                                        :key="time.getTime()" 
                                        :time="computeCorrectTime(time, hour-1)"
+                                       v-on:click-double="cellDoubleSelected($event)"
                                        v-on:click-down="cellSelected($event)"
                                        v-on:click-move="cellDrag($event)"
                                        v-on:click-up="cellUnselected($event)"
@@ -156,6 +157,16 @@ export default {
                         this.state.old_cursor = this.$el.style.cursor
                         this.$el.style.cursor = 'ns-resize'
                     }
+                }
+            }
+        },
+
+        cellDoubleSelected(value) {
+            console.log("azeihrzoieth")
+            for (let [i, event] of this.$refs.events.entries()) {
+                if (event.eventContains(value)) {
+                    this.$emit("view-event", event.id)
+                    return 
                 }
             }
         },

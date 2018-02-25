@@ -5,16 +5,16 @@
 		<div class="columns">
 			<div class="column">
 				<h4 class="title is-4">Début</h4>
-				<p>{{ beginning.toLocaleDateString() }}</p>
+				<p>{{ str_start_date }}</p>
 			</div>
 			
 			<div class="column">		
 				<h4 class="title is-4">Fin</h4>
-				<p>{{ end.toLocaleDateString() }}</p>
+				<p>{{ str_end_date }}</p>
 			</div>
 		</div>
 	  	
-		<p v-if="recurrent">
+		<p v-if="is_recurrent">
 			Cet événement est récurrent.
 		</p>
 		
@@ -24,7 +24,7 @@
 		
 		<h4 class="title is-4">Groupes</h4>
 		<b-taglist>
-			<b-tag type="is-info" v-for="group in taggedgroups" :key="group.name">{{ group.name }}</b-tag>
+			<b-tag type="is-info" v-for="group in groups" :key="group.name">{{ group.name }}</b-tag>
 		</b-taglist>
 		
 		<h4 class="title is-4">Description</h4>
@@ -36,26 +36,23 @@
 
 <script>
 
+import { eventMixin } from './EventMixin.js'
 export default {
+    mixins: [eventMixin],
     data(){
         return {
-        	title:"Pinata Party",
-        	description:"Pinata Party avec toutes les associations de l'ENS!",
-			recurrent: false,
-        	taggedgroups: 
-        	[{"name":"AliENS"},{"name":"BDE"},{"name":"AS"}],
-        	groups:
-        	[{"name":"AliENS"},{"name":"BDE"},{"name":"AS"},{"name":"ArcENSiel"},{"name":"Unknown"}],
-        	allowNew:false,
-		    beginning: new Date(),
-            end: new Date(),
-            event_color: 'FF0055',
         }
     },
 
     computed: {
         hexa_event_color: function(){
-            return 'color:#' + this.event_color
+            return 'color:#' + this.display_color
+        },
+        str_start_date: function() {
+            return this.start.toLocaleDateString()
+        },
+        str_end_date: function() {
+            return this.end.toLocaleDateString()
         }
     }
 }
