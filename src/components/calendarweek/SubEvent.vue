@@ -3,9 +3,6 @@
         <slot>
         </slot>
 
-        This part:
-        {{this.start}}
-        {{this.end}}
         <div v-if="hasHandle" class="tcw-handle-resize" ref="handle">
         </div>
     </div>
@@ -92,7 +89,6 @@ export default {
 <style scoped>
 .tcw-event {
     position: absolute;
-    background-color: #8eb9ff;
 }
 .tcw-handle-resize {
     position: absolute; 
@@ -101,6 +97,5 @@ export default {
     height: 25px; 
     margin: 0;
     padding: 0;
-    background-color:red;
 }
 </style>

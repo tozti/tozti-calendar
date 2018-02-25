@@ -8,25 +8,16 @@
             :id="index"
             :key="index">
 
-            <div class = "card" style="overflow:hidden; height:100%; font-size:80%">
-                <header class="card-header">
-                    <small>
-                        <b>14h - 18h</b><br/>
-                        <b>EventName</b><br/>
-                        AssociationName
-                    </small>
-                </header>
-                <div class = "content">
-                    <div style="height: calc(100%); overflow:hidden; font-size : smaller">
-                        <small>Excogitatum est super his, ut homines quidam ignoti, vilitate ipsa parum cavendi ad colligendos rumores per Antiochiae latera cuncta destinarentur relaturi quae audirent. hi peragranter et dissimulanter honoratorum circulis adsistendo pervadendoque divites domus egentium habitu quicquid noscere poterant vel audire latenter intromissi per posticas in regiam nuntiabant, id observantes conspiratione concordi, ut fingerent quaedam et cognita duplicarent in peius, laudes vero supprimerent Caesaris, quas invitis conpluribus formido malorum inpendentium exprimebat.</small>
-                    </div>
-                </div>
-            <footer class="card-footer" style="display:block; text-align :center">
+            <div class = "box" style="overflow:hidden; height:100%">
+                    <p>
+                    <b>EventName</b><br/>
+                    <b style = "font-size: 90%">{{durationString}}</b><br/>
+                    </p>
+                <div class="tags">
                 <span class="tag is-dark"><small>Label 1</small></span>
                 <span class="tag is-dark"><small>Label 2</small></span>
                 <span class="tag is-dark"><small>Label 3</small></span>
-            </footer>
-        
+                </div>
 
             </div>
         </sub-event>
@@ -60,6 +51,19 @@ export default {
     data: function () {
         return {
             parts: [{start: this.start, end: this.end}],
+        }
+    },
+
+    computed: {
+        durationString () {
+            const sm = this.start.getMinutes()
+            const em = this.end.getMinutes()
+            const ssm = (sm < 10) ? sm + '0' : sm
+            const sem = (em < 10) ? em + '0' : em
+
+            return this.start.getHours() + ":" + ssm +
+                ' - ' +
+                this.end.getHours() + ":" + sem
         }
     },
 

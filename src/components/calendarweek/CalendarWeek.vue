@@ -60,7 +60,7 @@ export default {
         filteredEvents : function() {
             return this.events.filter(
                 event => {
-                    return event.start <= this.end && this.start <= event.end
+                    return !(event.start >= this.end || this.start >= event.end)
                 }
             )
         },
@@ -154,6 +154,8 @@ export default {
 
                     if (event.handleContains(value)) {
                         this.state.status = CWActionStatus.resize
+                        this.state.old_cursor = this.$el.style.cursor
+                        this.$el.style.cursor = 'ns-resize'
                     }
                 }
             }
@@ -199,11 +201,20 @@ export default {
                 if (value.y <= bound_scroll.y + 1/10 * bound_scroll.height) {
                     this.$refs.scrollable.scrollBy(0, -10) 
                 }
+            } else {
+                // cursor stuff
+                this.$el.style.cursor = 'auto'
+                for (let [i, event] of this.$refs.events.entries()) {
+                    if (event.handleContains(value)) {
+                        this.$el.style.cursor = 'ns-resize'
+                    }
+                }
             }
         },
 
         stopAction() {
             this.state.status = CWActionStatus.none
+            this.$el.style.cursor = this.state.old_cursor
             console.log("stopping everything")
         },
 

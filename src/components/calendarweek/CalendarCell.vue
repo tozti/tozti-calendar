@@ -36,7 +36,6 @@ export default {
             let time =  new Date((fraction * this.duration.getTime() | 0) + this.time.getTime())
             time.setMinutes((time.getMinutes() / 15 | 0) * 15)
             time.setSeconds(0, 0)
-            
             return {
                 top: this.$el.offsetTop,
                 left: this.$el.offsetLeft,
