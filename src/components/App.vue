@@ -128,7 +128,7 @@ export default {
                 {
                     start: new Date(2018, 2, 19, 2, 0, 0, 0), 
                     end: new Date(2018, 2, 20, 5, 0, 0, 0), 
-                    id:0,
+                    id: "0",
                     title: "bar",
                     place: "bar",
                     description: "bar",
@@ -138,7 +138,7 @@ export default {
                 {
                     start: new Date(2018, 2, 21, 3, 0, 0, 0), 
                     end: new Date(2018, 2, 21, 8, 0, 0, 0), 
-                    id:1,
+                    id: "1",
                     title: "foo",
                     place: "foo",
                     description: "foo",

@@ -25,10 +25,6 @@ export default {
             type: Boolean,
             default: false
         },
-        id: {
-            type: Number,
-            default: 0
-        }
     },
     mounted: function () {
         this.updateDisplay()

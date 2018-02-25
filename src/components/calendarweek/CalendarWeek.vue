@@ -30,9 +30,7 @@
                     <Event v-for="(event, id) in filteredEvents" 
                            ref = "events"
                            :key="id"
-                           :id="event.id"
-                           :start="event.start" 
-                           :end="event.end">
+                           v-bind="event">
                     </Event>
                 </div>
             </div>

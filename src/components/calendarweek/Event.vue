@@ -5,12 +5,11 @@
             :start="part.start" 
             :end="part.end" 
             ref="parts" 
-            :id="index"
             :key="index">
 
             <div class = "box" style="overflow:hidden; height:100%">
                     <p>
-                    <b>EventName</b><br/>
+                    <b>{{title}}</b><br/>
                     <b style = "font-size: 90%">{{durationString}}</b><br/>
                     </p>
                 <div class="tags">
@@ -27,23 +26,11 @@
 <script>
 import { elementContains } from './../utils.js'
 import SubEvent from './SubEvent.vue'
+import { eventMixin } from './../EventMixin.js'
 export default {
+    mixins: [eventMixin],
     inject: ['timeToDisplayable'],
     components: {SubEvent},
-    props: {
-        start: {
-            type: Date,
-            default: new Date(),
-        },
-        end: {
-            type: Date,
-            default: new Date(),
-        },
-        id: {
-            type: Number,
-            default: 0
-        },
-    },
     mounted: function () {
         this.computeSubdivision()
     },
