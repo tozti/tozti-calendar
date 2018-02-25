@@ -3,7 +3,7 @@
         <div class="tcw-row is-marginless">
             <div class="tcw-inner-cal tcw-spacer">
             </div>
-        <div v-for="time in timeRange" class="tcw-inner-cal tcw-title" >
+        <div v-for="time in timeRange" class="tcw-inner-cal tcw-title"  v-on:dblclick="$emit('zoom-in', time)">
             <p class="title">{{time.getDate()}}</p>
         </div>
         </div>
@@ -58,6 +58,7 @@ export default {
     },
     computed: {
         filteredEvents : function() {
+            return this.events
             return this.events.filter(
                 event => {
                     return !(event.start >= this.end || this.start >= event.end)

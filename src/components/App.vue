@@ -2,8 +2,8 @@
     <section style="width:100%;">
         <nav class="level">
             <div class="level-left">
-                <p class="level-item"><a class="button" @click="offset_calendar=new Date(offset_calendar.getTime() - week.getTime() - day.getTime())">prev</a></p>
-                <p class="level-item"><a class="button" @click="offset_calendar=new Date(offset_calendar.getTime() + week.getTime() + day.getTime())">next</a></p>
+                <p class="level-item"><a class="button" @click="previousCalendarStep()">prev</a></p>
+                <p class="level-item"><a class="button" @click="nextCalendarStep()">next</a></p>
             </div>
 
 
@@ -59,13 +59,17 @@
         </b-modal>
 
         <template v-if="scaleCalendar===0">
-            <calendar-day>
-            </calendar-day>
+            <calendar-week :start="offset_calendar"
+                           :end="new Date((offset_calendar).getTime() + day.getTime() - day.getTime())"
+                            v-on:update="updateEvent($event)"
+                  :events="events">
+            </calendar-week>
         </template>
         <template v-else-if="scaleCalendar===1">
             <calendar-week :start="offset_calendar"
-                           :end="new Date((offset_calendar).getTime() + week.getTime())"
+                           :end="new Date((offset_calendar).getTime() + week.getTime() - day.getTime())"
                             v-on:update="updateEvent($event)"
+                            v-on:zoom-in="zoomin($event)"
                   :events="events">
             </calendar-week>
         </template>
@@ -98,7 +102,7 @@ export default {
                 password: 'testing'
             },
             scaleCalendar: 1,
-            week: createOffsetDate(0, 0, 6, 0, 0),
+            week: createOffsetDate(0, 0, 7, 0, 0),
             day: createOffsetDate(0, 0, 1, 0, 0),
             offset_calendar: new Date(2018, 2, 18),
             events: [{start: new Date(2018, 2, 19, 2, 0, 0, 0), end: new Date(2018, 2, 20, 5, 0, 0, 0), uid:0},
@@ -113,6 +117,29 @@ export default {
             for (const el in infos.content) {
                 event[el] = infos.content[el]
             }
+        },
+
+        nextCalendarStep() {
+            let offset = this.day
+            if (this.scaleCalendar == 1) {
+                offset = this.week
+            }
+            this.offset_calendar = new Date(this.offset_calendar.getTime() + offset.getTime()) 
+        },
+
+        previousCalendarStep() {
+            let offset = this.day
+            if (this.scaleCalendar == 1) {
+                offset = this.week
+            }
+            this.offset_calendar = new Date(this.offset_calendar.getTime() - offset.getTime()) 
+        },
+
+        zoomin(focus_day) {
+            this.scaleCalendar -= 1
+            if (this.scaleCalendar < 0)
+                this.scaleCalendar = 0
+            this.offset_calendar = focus_day
         }
     }
 }
