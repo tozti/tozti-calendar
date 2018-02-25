@@ -1,9 +1,18 @@
 <template>
-    <div class="container">
-      <h2 class="title is-2">Événement: {{ title }} </h2>
-	  
-	  <h6 class="title is-6">Date</h6>
-	  <p>{{ time.toLocaleDateString() }}</p>
+    <div class="content">
+      <h3 class="title is-3">Événement: {{ title }} </h3>
+
+	  <div class="columns">
+		<div class="column">
+		  <h4 class="title is-4">Début</h4>
+		  <p>{{ beginning.toLocaleDateString() }}</p>
+		</div>
+
+		<div class="column">		
+		  <h4 class="title is-4">Fin</h4>
+		  <p>{{ end.toLocaleDateString() }}</p>
+		</div>
+	  </div>
 	  	  
 	  <p v-if="recurrent">
 		Cet événement est récurrent.
@@ -13,12 +22,12 @@
 		Cet événement n'est pas récurrent.
 	  </p>
 	  
-	  <h6 class="title is-6">Groupes</h6>
+	  <h4 class="title is-4">Groupes</h4>
 	  <b-taglist>
 		<b-tag type="is-info" v-for="group in taggedgroups" :key="group.name">{{ group.name }}</b-tag>
 	  </b-taglist>
 	  
-	  <h6 class="title is-6">Description</h6>
+	  <h4 class="title is-4">Description</h4>
 	  <p>{{ description }}</p>
 
      
@@ -39,7 +48,8 @@ export default {
         	groups:
         	[{"name":"AliENS"},{"name":"BDE"},{"name":"AS"},{"name":"ArcENSiel"},{"name":"Unknown"}],
         	allowNew:false,
-		    time: new Date(),
+		    beginning: new Date(),
+            end: new Date(),
         }
     }
 }
