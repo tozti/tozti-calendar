@@ -87,8 +87,8 @@
                           title="Ajouter" 
                           :opened="add_event_opened" 
                           @closed="sidebarClosed(); add_event_opened=false">
-                <view-event v-bind="viewed_event">
-                </view-event>
+                <modify-event v-bind="modify_event">
+                </modify-event>
             </sidebar-menu>
         </div>
     </section>
@@ -127,6 +127,7 @@ export default {
             day: createOffsetDate(0, 0, 1, 0, 0),
             offset_calendar: new Date(2018, 2, 18),
             viewed_event: {},
+            modify_event: {},
             events: [
                 {
                     start: new Date(2018, 2, 19, 2, 0, 0, 0), 
