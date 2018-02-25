@@ -8,7 +8,6 @@
                         <p class="level-item"><a class="button" @click="nextCalendarStep()">next</a></p>
                     </div>
 
-
                     <div class="level-right">
                         <p class="level-item">
                         <button class="button is-primary"
@@ -86,7 +85,8 @@
                           title="Ajouter" 
                           :opened="add_event_opened" 
                           @closed="sidebarClosed(); add_event_opened=false">
-                bla
+                <view-event>
+                </view-event>
             </sidebar-menu>
         </div>
     </section>
@@ -99,6 +99,8 @@ import CalendarDay from './CalendarDay.vue'
 import CalendarMonth from './CalendarMonth.vue'
 import SidebarMenu from './SidebarMenu.vue'
 import { createOffsetDate } from './utils.js'
+import ModifyEvent from './ModifyEvent.vue'
+import ViewEvent from './ViewEvent.vue'
 
 export default {
     components: {
@@ -107,6 +109,8 @@ export default {
         CalendarMonth,
         CalendarDay,
         SidebarMenu,
+        ModifyEvent,
+        ViewEvent
     },
     data() {
         return {

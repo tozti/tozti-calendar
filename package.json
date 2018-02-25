@@ -26,5 +26,8 @@
     "package": "npm run release && tar -zcvf `basename $PWD`.tar.gz * --exclude=src --exclude=assets --exclude=node_modules --exclude=.git",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "license": "AGPL-3.0"
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "vue-swatches": "^1.0.0-rc.10"
+  }
 }
