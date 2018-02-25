@@ -23,3 +23,11 @@ export function computeFifthWeek(date) {
     }
     return out
 }
+
+// one of Poeschsel's utils functions
+export function elementContains(el, pos) {
+    const bounds = el.getBoundingClientRect()
+
+    return (bounds.x <= pos.x && pos.x < bounds.x + bounds.width)
+        && (bounds.y <= pos.y && pos.y < bounds.y + bounds.height)
+}

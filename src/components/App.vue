@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section style="width:100%;">
         <nav class="level">
             <div class="level-left">
                 <p class="level-item"><a class="button">prev</a></p>
@@ -77,7 +77,7 @@
 import ModalForm from './EventCreationModal.vue'
 import CalendarWeek from './CalendarWeek.vue'
 import CalendarDay from './CalendarDay.vue'
-import CalendarMonth from './CalendarMonth.vue'
+import CalendarMonth from './calendar-month/CalendarMonth.vue'
 
 export default {
     components: {
