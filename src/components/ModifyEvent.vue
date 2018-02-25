@@ -4,37 +4,35 @@
         <b-input maxlength="50"  v-model="title"></b-input>
 	  </b-field>
 	  
-	  <div class="columns">
-		<b-field label="Date de début" class="column">
-          <b-datepicker
-			icon="calendar-today"
-			v-model="time">
-          </b-datepicker>
-		</b-field>
-		
-		<b-field label="Heure" class="column">
-          <b-timepicker
-			icon="clock"
-			v-model="time">
-          </b-timepicker>
-		</b-field>
-	  </div>
-	  
-	  <div class="columns">
-		<b-field label="Date de fin" class="column">
-          <b-datepicker
-			icon="calendar-today"
-			:min-date="time">
-          </b-datepicker>
-		</b-field>
-		
-		<b-field label="Heure" class="column">
-          <b-timepicker
-			icon="clock"
-			v-model="time">
-          </b-timepicker>
-		</b-field>
-	  </div>
+      <b-field grouped>
+        <b-field label="Début" expanded>
+          <b-field>
+            <b-datepicker
+              placeholder="Sélectionner"
+              icon="calendar-today"
+			  v-model="time">
+            </b-datepicker>
+            <b-timepicker
+			  icon="clock"			  
+			  v-model="time"
+              required>
+            </b-timepicker>
+          </b-field>
+        </b-field>
+        <b-field label="Fin" expanded>
+          <b-field>
+            <b-datepicker
+              placeholder="Sélectionner"
+              icon="calendar-today">
+            </b-datepicker>
+            <b-timepicker
+			  icon="clock"			  
+			  v-model="time"
+              required>
+            </b-timepicker>
+          </b-field>
+        </b-field>
+      </b-field>
 
 	  <div class="field">
         <b-switch v-model="recurrent">Événement récurrent</b-switch>
