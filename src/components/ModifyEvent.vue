@@ -9,11 +9,11 @@
 				<b-datepicker
 					placeholder="Sélectionner"
 					icon="calendar-today"
-					v-model="time">
+					v-model="start">
 				</b-datepicker>
 				<b-timepicker
 					icon="clock"			  
-					v-model="time"
+					v-model="start"
 					required>
 				</b-timepicker>
 			</b-field>
@@ -22,11 +22,12 @@
 			<b-field>
 				<b-datepicker
 					placeholder="Sélectionner"
+					v-model="end"
 					icon="calendar-today">
 				</b-datepicker>
 				<b-timepicker
 					icon="clock"			  
-					v-model="time"
+					v-model="end"
 					required>
 				</b-timepicker>
 			</b-field>
@@ -35,12 +36,12 @@
 		<b-field class="columns" expanded>
 			<b-field class="column"label="Couleur">
 				<div>
-					<swatches v-model="color" />
+					<swatches v-model="display_color" />
 				</div>
 			</b-field>
 			
 			<b-field class="column" label="Récurrent">
-				<b-switch v-model="recurrent"></b-switch>
+				<b-switch v-model="is_recurrent"></b-switch>
 			</b-field>
 		</b-field>
 
@@ -52,7 +53,7 @@
 		
 		<b-field label="Groupes">   
 			<b-taginput
-				v-model="taggedgroups":data="groups"
+				v-model="groups":data="existing_groups"
 				field="name"
 				autocomplete
 				:allowNew="allowNew"
@@ -73,21 +74,15 @@
 import Swatches from 'vue-swatches'
 import "vue-swatches/dist/vue-swatches.min.css"
 
+import { eventMixin } from './EventMixin.js'
 export default {
-	components: { Swatches },    
+    mixins: [eventMixin],
+    components: { Swatches },    
     data(){
         return {
-        	title:"Pinata Party",
-        	description:"Pinata Party avec toutes les associations de l'ENS!",
-			recurrent: false,
-        	taggedgroups: 
-        	[{"name":"AliENS"},{"name":"BDE"},{"name":"AS"}],
-        	groups:
+        	existing_groups:
         	[{"name":"AliENS"},{"name":"BDE"},{"name":"AS"},{"name":"ArcENSiel"},{"name":"Unknown"}],
-			place: 'Ibiza',
         	allowNew:false,
-		    time: new Date(),
-			color: '#1CA085',
         }
     }
 }
