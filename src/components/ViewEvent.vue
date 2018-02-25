@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-      <h3 class="title is-3">Événement: {{ title }} </h3>
+	<h3 class="title is-3"><span :style="hexa_event_color">Événement: {{ title }}</span></h3>
 
 	  <div class="columns">
 		<div class="column">
@@ -37,7 +37,6 @@
 <script>
 
 export default {
-    
     data(){
         return {
         	title:"Pinata Party",
@@ -50,6 +49,13 @@ export default {
         	allowNew:false,
 		    beginning: new Date(),
             end: new Date(),
+            event_color: 'FF0055',
+        }
+    },
+
+    computed: {
+        hexa_event_color: function(){
+            return 'color:#' + this.event_color
         }
     }
 }
