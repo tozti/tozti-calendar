@@ -42,7 +42,13 @@
 			<b-field class="column" label="Récurrent">
 				<b-switch v-model="recurrent"></b-switch>
 			</b-field>
-		</b-field>		
+		</b-field>
+
+		<b-field label="Lieu">
+			<div class="field">
+				<b-input icon="map-marker" v-model="place"></b-input>
+			</div>
+		</b-field>
 		
 		<b-field label="Groupes">   
 			<b-taginput
@@ -78,6 +84,7 @@ export default {
         	[{"name":"AliENS"},{"name":"BDE"},{"name":"AS"}],
         	groups:
         	[{"name":"AliENS"},{"name":"BDE"},{"name":"AS"},{"name":"ArcENSiel"},{"name":"Unknown"}],
+			place: 'Ibiza',
         	allowNew:false,
 		    time: new Date(),
 			color: '#1CA085',
