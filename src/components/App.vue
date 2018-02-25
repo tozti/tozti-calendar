@@ -4,25 +4,14 @@
             <div class="tc-content">
                 <nav class="level">
                     <div class="level-left">
-                        <p class="level-item"><a class="button" @click="previousCalendarStep()">prev</a></p>
-                        <p class="level-item"><a class="button" @click="nextCalendarStep()">next</a></p>
-                    </div>
-
-                    <div class="level-right">
                         <p class="level-item">
-                        <button class="button is-primary"
-                                @click="isComponentModalActive = true">
-                            Ajouter un evenement
-                        </button>
-                        </p>
-                        <p class="level-item">
-                        <button class="button is-primary" @click="add_event_opened=true">
-                            Plus d'informations
-                        </button>
+                            <a class="button" @click="previousCalendarStep()">
+                                <i class="mdi mdi-24px mdi-chevron-left"></i>
+                            </a>
                         </p>
                         <p class="level-item">
                         <b-dropdown v-model="scaleCalendar" hoverable>
-                            <button class="button is-info" slot="trigger">
+                            <button class="button" slot="trigger">
                                 <template v-if="scaleCalendar === 1">
                                     <span>Week</span>
                                 </template>
@@ -52,6 +41,22 @@
                             </b-dropdown-item>
                         </b-dropdown>
                         </p>
+                        <p class="level-item">
+                        <a class="button" @click="nextCalendarStep()">
+                                <i class="mdi mdi-24px mdi-chevron-right"></i>
+                            </a>
+                        </p>
+                        <p class="level-item">
+                            {{monthLabel}}
+                        </p>
+                    </div>
+
+                    <div class="level-right">
+                        <p class="level-item">
+                        <a class="button is-primary" @click="sidebarAddEvent()">
+                            <i class="mdi mdi-24px mdi-plus"></i>
+                        </a>
+                        </p>
                     </div>
                 </nav>
 
@@ -71,7 +76,7 @@
                 <template v-else-if="scaleCalendar===1">
                     <calendar-week :start="offset_calendar"
                           :end="new Date((offset_calendar).getTime() + week.getTime() - day.getTime())"
-                          v-on:view-event="viewEvent($event)"
+                          v-on:view-event="sidebarViewEvent($event)"
                           v-on:update="updateEvent($event)"
                           v-on:zoom-in="zoomin($event)"
                           :events="events"
@@ -84,17 +89,29 @@
                 </template>
             </div>
             <sidebar-menu class = "tc-sidebar" 
-                          title="Ajouter" 
-                          :opened="add_event_opened" 
-                          @closed="sidebarClosed(); add_event_opened=false">
-                <modify-event v-bind="modify_event">
-                </modify-event>
+                          :title="sidebar.titles[sidebar.status]" 
+                          :opened="sidebar.opened" 
+                          @closed="sidebarClose()">
+                <template v-if="sidebar.type == 0">
+                    <view-event v-bind="sidebar.event"
+                        v-on:edit-event="sidebarModifyEvent($event)">
+                    </view-event>
+                </template>
+                <template v-else-if="sidebar.type == 1">
+                    <modify-event v-bind="sidebar.event" ref="modify" v-on:validated="updateEvent($event)">
+                    </modify-event>
+                </template>
+                <template v-else >
+                    <modify-event v-bind="{}" ref="modify" v-on:validated="addEvent($event)">
+                    </modify-event>
+                </template>
             </sidebar-menu>
         </div>
     </section>
 </template>
 
 <script>
+const SidebarStatus = Object.freeze({View: 0, Modify: 1, Create: 2})
 import ModalForm from './EventCreationModal.vue'
 import CalendarWeek from './calendarweek/CalendarWeek.vue'
 import CalendarDay from './CalendarDay.vue'
@@ -122,12 +139,15 @@ export default {
                 password: 'testing'
             },
             scaleCalendar: 1,
-            add_event_opened: true,
+            sidebar : {
+                opened : true,
+                type : SidebarStatus.View,
+                event : {},
+                titles : ['Evenement', 'Modification', 'Ajout']
+            },
             week: createOffsetDate(0, 0, 7, 0, 0),
             day: createOffsetDate(0, 0, 1, 0, 0),
             offset_calendar: new Date(2018, 2, 18),
-            viewed_event: {},
-            modify_event: {},
             events: [
                 {
                     start: new Date(2018, 2, 19, 2, 0, 0, 0), 
@@ -152,6 +172,14 @@ export default {
             ]
         }
     },
+
+    computed: {
+        monthLabel() {
+            const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"]
+            return months[this.offset_calendar.getMonth()]
+        }
+    },
+
     methods: {
         updateEvent(infos) {
             let event = this.events.find(evt => {
@@ -160,6 +188,15 @@ export default {
             for (const el in infos.content) {
                 event[el] = infos.content[el]
             }
+        },
+
+        addEvent(new_event) {
+            //in theory should be getted by the server
+            const new_uid = String(this.events.length + 1)
+            new_event.id = new_uid
+            this.events.push(
+                new_event
+            )
         },
 
         nextCalendarStep() {
@@ -185,7 +222,16 @@ export default {
             this.offset_calendar = focus_day
         },
 
-        sidebarClosed() {
+        sidebarOpen() {
+            this.sidebar.opened = true;
+            if (this.$refs.calendar) {
+                Vue.nextTick().then(() => {
+                    this.$refs.calendar.updateEventsRendering()
+                })
+            }
+        },
+        sidebarClose() {
+            this.sidebar.opened = false;
             if (this.$refs.calendar) {
                 Vue.nextTick().then(() => {
                     this.$refs.calendar.updateEventsRendering()
@@ -193,11 +239,24 @@ export default {
             }
         },
 
-        viewEvent(id) {
-            this.viewed_event = this.events.find(evt => {
+        sidebarViewEvent(id) {
+            this.sidebar.type = SidebarStatus.View
+            this.sidebar.event = this.events.find(evt => {
                 return evt.id == id
             })
-            this.add_event_opened = true
+            this.sidebarOpen()
+        },
+        sidebarModifyEvent(id) {
+            this.sidebar.type = SidebarStatus.Modify
+            this.sidebar.event = this.events.find(evt => {
+                return evt.id == id
+            })
+            this.sidebarOpen()
+        },
+        sidebarAddEvent(id) {
+            this.sidebar.type = SidebarStatus.Add
+            this.sidebar.event = {}
+            this.sidebarOpen()
         }
     }   
 }

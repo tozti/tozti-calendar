@@ -7,7 +7,7 @@
             ref="parts" 
             :key="index">
 
-            <div class = "box" style="overflow:hidden; height:100%">
+            <div class = "box" style="overflow:hidden; height:100%" :style="backgroundStyle">
                     <p>
                     <b>{{title}}</b><br/>
                     <b style = "font-size: 90%">{{durationString}}</b><br/>
@@ -51,6 +51,9 @@ export default {
             return this.start.getHours() + ":" + ssm +
                 ' - ' +
                 this.end.getHours() + ":" + sem
+        },
+        backgroundStyle () {
+            return "background-color: " + this.display_color + ";"
         }
     },
 

@@ -4,7 +4,7 @@
             <div class="tcw-inner-cal tcw-spacer">
             </div>
         <div v-for="time in timeRange" class="tcw-inner-cal tcw-title"  v-on:dblclick="$emit('zoom-in', time)">
-            <p class="title">{{time.getDate()}}</p>
+            <p class="title">{{ dateLabel(time) }}</p>
         </div>
         </div>
         <div class="tcw-container-scroll" style="position:relative;" ref="scrollable" 
@@ -126,6 +126,11 @@ export default {
     },
 
     methods: {
+        dateLabel(date) {
+            const days = ["Di", "Lu", "Ma", "Me", "Je", "Ve", "Sa"]
+            return days[date.getDay()] + " " + date.getDate()
+        },
+
         updateEventsRendering() {
             for (let c of this.$refs.events) {
                 c.computeSubdivision()

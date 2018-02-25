@@ -14,15 +14,15 @@ export let eventMixin = {
         },
         start: {
             type: Date,
-            default: function () {return new Date(0)}
+            default: function () {return new Date()}
         },
         end: {
             type: Date,
-            default: function () {return new Date(0)}
+            default: function () {return new Date()}
         },
         display_color: {
             type: String,
-            default: "white"
+            default: "gray"
         },
         is_recurrent: {
             type: Boolean,

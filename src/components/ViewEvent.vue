@@ -1,5 +1,9 @@
 <template>
     <div class="content">
+        <a class="button" @click="$emit('edit-event', id)">
+            <i class="mdi mdi-24px mdi-pencil"></i>
+        </a>
+
 		<h3 class="title is-3"><span :style="hexa_event_color">Événement: {{ title }}</span></h3>
 		
 		<div class="columns">
