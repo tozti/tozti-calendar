@@ -13,6 +13,12 @@
                         <i class="mdi mdi-24px mdi-pencil"></i>
                     </a>
                 </div>
+
+                <div class="level-item">
+                    <a class="button" @click="$emit('delete-event', id)">
+                        <i class="mdi mdi-24px mdi-delete"></i>
+                    </a>
+                </div>
             </div>
         </div>
 		
@@ -43,7 +49,6 @@
 		
 		<h4 class="title is-4">Description</h4>
 		<p>{{ description }}</p>
-		
 		
     </div>
 </template>
