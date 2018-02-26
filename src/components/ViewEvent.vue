@@ -1,10 +1,20 @@
 <template>
     <div class="content">
-        <a class="button" @click="$emit('edit-event', id)">
-            <i class="mdi mdi-24px mdi-pencil"></i>
-        </a>
+        <div class="level">
+            <div class="level-left">
+                <div class="level-item">
+                    <h3 class="title is-3"><span :style="hexa_event_color">{{ title }}</span></h3>
+                </div>
+            </div>
 
-		<h3 class="title is-3"><span :style="hexa_event_color">Événement: {{ title }}</span></h3>
+            <div class="level-right">		
+                <div class="level-item">
+                    <a class="button" @click="$emit('edit-event', id)">
+                        <i class="mdi mdi-24px mdi-pencil"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
 		
 		<div class="columns">
 			<div class="column">

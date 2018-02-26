@@ -46,7 +46,7 @@
                                 <i class="mdi mdi-24px mdi-chevron-right"></i>
                             </a>
                         </p>
-                        <p class="level-item">
+                        <p class="level-item title is-4">
                             {{monthLabel}}
                         </p>
                     </div>
@@ -89,7 +89,7 @@
                 </template>
             </div>
             <sidebar-menu class = "tc-sidebar" 
-                          :title="sidebar.titles[sidebar.status]" 
+                          :title="sidebar.title" 
                           :opened="sidebar.opened" 
                           @closed="sidebarClose()">
                 <template v-if="sidebar.type == 0">
@@ -140,7 +140,7 @@ export default {
             },
             scaleCalendar: 1,
             sidebar : {
-                opened : true,
+                opened : false,
                 type : SidebarStatus.View,
                 event : {},
                 titles : ['Evenement', 'Modification', 'Ajout']
@@ -241,6 +241,7 @@ export default {
 
         sidebarViewEvent(id) {
             this.sidebar.type = SidebarStatus.View
+            this.sidebar.title = "Evenement"
             this.sidebar.event = this.events.find(evt => {
                 return evt.id == id
             })
@@ -248,6 +249,7 @@ export default {
         },
         sidebarModifyEvent(id) {
             this.sidebar.type = SidebarStatus.Modify
+            this.sidebar.title = "Modification"
             this.sidebar.event = this.events.find(evt => {
                 return evt.id == id
             })
@@ -255,6 +257,7 @@ export default {
         },
         sidebarAddEvent(id) {
             this.sidebar.type = SidebarStatus.Add
+            this.sidebar.title = "Création"
             this.sidebar.event = {}
             this.sidebarOpen()
         }
