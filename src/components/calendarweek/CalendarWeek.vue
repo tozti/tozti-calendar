@@ -299,7 +299,7 @@ export default {
 .tcw-container-scroll {
     /* For now the container has a fixed height.
     TODO: Find a way to make this height not fixed */
-height: 500px;
+height: 700px;
 overflow-y: scroll;
 margin-right: 0px;
 }
