@@ -94,7 +94,8 @@
                           @closed="sidebarClose()">
                 <template v-if="sidebar.type == 0">
                     <view-event v-bind="sidebar.event"
-                        v-on:edit-event="sidebarModifyEvent($event)">
+								v-on:edit-event="sidebarModifyEvent($event)"
+								v-on:delete-event="deleteEvent($event)">
                     </view-event>
                 </template>
                 <template v-else-if="sidebar.type == 1">
@@ -106,6 +107,7 @@
                     </modify-event>
                 </template>
             </sidebar-menu>
+
         </div>
     </section>
 </template>
@@ -198,6 +200,15 @@ export default {
                 new_event
             )
         },
+
+		deleteEvent(id) {
+			var i
+			for (i = 0; i < this.events.length; i++){
+				if (this.events[i].id == id){
+					this.events.splice(i, 1);
+				}
+			}
+		},
 
         nextCalendarStep() {
             let offset = this.day
