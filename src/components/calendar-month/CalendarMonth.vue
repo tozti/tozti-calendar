@@ -10,7 +10,10 @@
         
     <div class = "tcm-calendar-title-month">
         <a class="button is-outlined is-dark"><</a>
-        <a class="button is-outlined is-dark">Février</a>
+        <a class="button is-outlined is-dark">
+            {{ months[currentDate.getMonth()] }}
+            {{ currentDate.getFullYear() }}
+        </a>
         <a class="button is-outlined is-dark">></a>
     </div>
         
@@ -35,18 +38,46 @@
 import { computeFifthWeek } from './../utils.js'
 import Event from './Event.vue'
 
-var data = {monthDate : new Date()}
 export default {
+    
     data() {        
         return { 
-            // void elements to create first column
-            Weeks : [,1,2,3,4,5,6,7,,8,9,10,11,12,13,14,,15,16,17,18,19,20,21,,22,23,24,25,26,27,28].concat(computeFifthWeek(data.monthDate)),
+            selectedMonth : new Date(),
+            // void elements to create first column            
+            firstWeeks : [,1,2,3,4,5,6,7,,8,9,10,11,12,13,14,,15,16,17,18,19,20,21,,22,23,24,25,26,27,28],
+            
             weekDays : ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"],
             
             months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
         }
     },
+    computed: {
+        selectedMonth: {
+            set : function (newMonthDate) {
+                this.selectedMonth = newMonthDate
+            },
+            
+            get : function () {
+                return this.selectedMonth
+            }
+        },
+        
+        currentDate: function() {
+            return new Date()
+        },
+        
+        fifthWeek: function() {
+            return computeFifthWeek(this.selectedMonth)
+        },
+        
+        Weeks: function() {
+            return (this.firstWeeks).concat(this.fifthWeek)
+        }
+    },
+    
+    
     methods: {
+        
         say: function (message) {
       alert(message)
     },
@@ -127,7 +158,7 @@ export default {
     
 .tcm-calendar-title-month {
     margin-left: 19px;
-    height: 38px;
+    height: 46px;
     font-size: 22px;
     color: darkblue;
     text-align: center;
