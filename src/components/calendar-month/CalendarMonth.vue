@@ -7,13 +7,17 @@
 
 
 <div id = "tcm-calendar-month">
-    <div class = "tcm-calendar-header">
-
-        <div class = "tcm-calendar-title-month">Février</div>
-        <div id = "tcm-calendar-title-days">
+        
+    <div class = "tcm-calendar-title-month">
+        <a class="button is-outlined is-dark"><</a>
+        <a class="button is-outlined is-dark">Février</a>
+        <a class="button is-outlined is-dark">></a>
+    </div>
+        
+    
+    <div id = "tcm-calendar-title-days">
         <div v-for="titleDay in weekDays" class = "tcm-calendar-title-day ">{{titleDay}}</div>
 
-    </div>
     </div>
 
 
@@ -119,18 +123,19 @@ export default {
     flex: 0 0 80px;
 }
 
-
+  
     
 .tcm-calendar-title-month {
-    justify-self: center;
+    margin-left: 19px;
+    height: 38px;
     font-size: 22px;
     color: darkblue;
-    padding-bottom: 80px;
+    text-align: center;
 }
     
 #tcm-calendar-title-days {
     height: 23px;
-    margin-left: 20px;
+    margin-left: 19px;
     display: grid;
     flex-direction: row;
     grid-template-columns: repeat(7, 1fr);
@@ -148,9 +153,6 @@ export default {
     border-bottom: 1px solid dark-grey;
     justify-self: center;
 }
-
-
-
 
 .tcm-calendar-time-cell {
     display: flex;
