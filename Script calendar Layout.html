@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<script>
+
+// Les evenements doivent être par id croissant et se suivre (cad l'ID de l'evenement doit correspondre a sa case dans le tableau events)
+// Start et End designe le début et la fin de l'evenement en minutes (0 correspondant a minuit)
+// Pos est un objet tel que Init vaut 1 si la position de l'objet a bien été calculé, 0 sinon. Su/Sd designe la taille de l'evenement sur le calendrier, Nb sa position par rapport aux autres evenements)
+
+
+var event1 = {Id:0, Start:720, End:960, Pos:{Init:0, Su:1, Sd:1, Nb:0}}; // commence a 12h, fini a 16h
+var event2 = {Id:1, Start:840, End:1080, Pos:{Init:0, Su:1, Sd:1, Nb:0}}; // commence a 14h, fini a 18h
+var event3 = {Id:2, Start:960, End:1200, Pos:{Init:0, Su:1, Sd:1, Nb:0}}; // commence a 16h, fini a 20h
+var event4 = {Id:3, Start:1080, End:1320, Pos:{Init:0, Su:1, Sd:1, Nb:0}}; // commence a 18h, fini a 22h
+var event5 = {Id:4, Start:1080, End:1320, Pos:{Init:0, Su:1, Sd:1, Nb:0}}; // commence a 18h, fini a 22h
+var event6 = {Id:5, Start:1080, End:1320, Pos:{Init:0, Su:1, Sd:1, Nb:0}}; // commence a 18h, fini a 22h
+var event7 = {Id:6, Start:600, End:720, Pos:{Init:0, Su:1, Sd:1, Nb:0}}; // commence a 10h, fini a 12h
+var event8 = {Id:7, Start:600, End:720, Pos:{Init:0, Su:1, Sd:1, Nb:0}}; // commence a 10h, fini a 12h
+
+
+var events = [event1, event2, event3, event4, event5, event6, event7, event8];
+events = Calendar_EventDisplayParameter(events);
+
+for (i = 0; i < events.length; i++) {
+	console.log(events[i].Id + " : taille = " + (events[i].Pos.Sd) + ", position = " + events[i].Pos.Nb);
+    } 
+
+
+
+
+
+
+
+function Calendar_EventDisplayParameter(Ev) {
+    var discretStep = 15; // precision d'un quart d'heure
+
+
+    var step = 0;
+    var eventArray = [];       // tableau contenant les evenement en cours lors d'un quart d'heure.
+
+    while(step < 1440) {       // initialise notre tableau 
+        eventArray.push([[]]); // la première case sert a donner les positions deja utilisé par un autre evenement.
+        step+=discretStep;
+    }
+    
+    for (i = 0; i < Ev.length; i++) {
+        for(j = Ev[i].Start ; j < Ev[i].End ; j += discretStep) {
+            eventArray[Math.trunc(j/discretStep)].push(Ev[i].Id); // on remplis notre tableau avec les evenements.
+        }
+    }
+
+
+    // calcul de la position des evenements
+
+
+    for (i = 0; i < Ev.length; i++) { // Première boucle sur le nombre d'evenement, place les evenement les un par rapport aux autres
+	var pos = 0;
+        for(j = Ev[i].Start ; j < Ev[i].End ; j += discretStep) { // boucle sur la durée des evenements
+            while(eventArray[Math.trunc(j/discretStep)][0].indexOf(pos) != -1) { //boucle sur le nombre d'intersection sur un quart-d'heure.
+                pos++; //si la variable pos est déja utilisé, on incremente pos
+                j = Ev[i].Start; // on reprend notre boucle for a 0 pour bien balayer toute la durée de l'evenement avec notre nouveau pos.
+            }
+        }
+        for(j = Ev[i].Start ; j < Ev[i].End ; j += discretStep) { // boucle sur la durée des evenements
+            eventArray[Math.trunc(j/discretStep)][0].push(pos);
+            Ev[i].Pos.Nb = pos;
+        }
+    }
+
+
+    // calcul de la taille des evenements :
+    
+    
+    for (i = Ev.length - 1; i >= 0; i--) { // boucle sur le nombre d'evenement, calcul la taille de chaque evenements.
+
+
+        var elemIntersec = Array(Ev.length);
+        var taille = 0;
+
+	for(j = Ev[i].Start ; j < Ev[i].End ; j += discretStep) { // boucle sur la durée des evenements
+            for(k = 0 ; k < eventArray[Math.trunc(j/discretStep)][0].length ; k++) { // boucle sur les intersections (position)
+                if(elemIntersec[eventArray[Math.trunc(j/discretStep)][0][k]] != 1) {
+                    taille++;
+                }
+                elemIntersec[eventArray[Math.trunc(j/discretStep)][0][k]] = 1;
+            }
+        
+        }
+
+
+	var elemIntersec = Array(Ev.length);
+        var minTailleIntersec = 0; 
+
+	for(j = Ev[i].Start ; j < Ev[i].End ; j += discretStep) { // boucle sur la durée des evenements
+            for(k = 1 ; k < eventArray[Math.trunc(j/discretStep)].length ; k++) { // boucle sur les intersections (Id des element qui intersecte)
+                if(elemIntersec[eventArray[Math.trunc(j/discretStep)][k]] != 1) {
+                    if(Ev[eventArray[Math.trunc(j/discretStep)][k]].Pos.Sd > minTailleIntersec) {
+                        minTailleIntersec = Ev[eventArray[Math.trunc(j/discretStep)][k]].Pos.Sd;
+                    }
+                }
+                elemIntersec[eventArray[Math.trunc(j/discretStep)][k]] = 1;
+            }
+        
+        }
+
+        Ev[i].Pos.Init = 1;
+        if(taille > minTailleIntersec){
+            Ev[i].Pos.Sd = taille;
+        }
+        if(taille <= minTailleIntersec){
+            Ev[i].Pos.Sd = minTailleIntersec;
+        }
+    } 
+
+    return Ev;
+}
+
+
+
+</script>
+
+</body>
+</html> 
