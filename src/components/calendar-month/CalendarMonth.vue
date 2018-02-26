@@ -9,12 +9,16 @@
 <div id = "tcm-calendar-month">
         
     <div class = "tcm-calendar-title-month">
-        <a class="button is-outlined is-dark"><</a>
+        <a class="button is-outlined is-dark"
+           v-on:click="previousMonth()"><</a>
+            
+            
         <a class="button is-outlined is-dark">
-            {{ months[currentDate.getMonth()] }}
-            {{ currentDate.getFullYear() }}
+            {{ months[selectedMonth.getMonth()] }}
+            {{ selectedMonth.getFullYear() }}
         </a>
-        <a class="button is-outlined is-dark">></a>
+        <a class="button is-outlined is-dark"
+           v-on:click="nextMonth()">></a>
     </div>
         
     
@@ -51,6 +55,7 @@ export default {
             months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
         }
     },
+    
     computed: {
         selectedMonth: {
             set : function (newMonthDate) {
@@ -84,6 +89,20 @@ export default {
         
         assignMonth: function (newDate) {
             this.monthDate = newDate
+        },
+        
+        previousMonth : function () {
+         var temp = new Date(this.selectedMonth)
+         var month = this.selectedMonth.getMonth()
+         temp.setMonth(month-1)
+         this.selectedMonth = temp
+        },
+        
+        nextMonth : function () {
+         var temp = new Date(this.selectedMonth)
+         var month = this.selectedMonth.getMonth()
+         temp.setMonth(month+1)
+         this.selectedMonth = temp
         },
         
         cellSelected(value) {
