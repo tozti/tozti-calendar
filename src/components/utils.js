@@ -3,6 +3,28 @@ function leapYear(year)
   return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
 }
 
+export function getMonth(date)
+{
+console.log(date)
+    var arMonth = [];
+    var month = date.getMonth();
+    date.setDate(1);
+    while(date.getDay() != 1) {
+        date.setDate(date.getDate()-1);
+    }
+    while(date.getMonth() != month) {
+        var newDay = new Date(date.getTime());
+        arMonth.push(newDay);
+        date.setDate(date.getDate()+1);
+    }
+    while(date.getMonth() == month || date.getDay() != 1) {
+        var newDay = new Date(date.getTime());
+        arMonth.push(newDay);
+        date.setDate(date.getDate()+1);
+    }
+    return arMonth;
+}
+
 function daysInMonth(anyDateInMonth) {
     return new Date(anyDateInMonth.getYear(), 
                     anyDateInMonth.getMonth()+1, 

@@ -29,9 +29,9 @@
 
 
 <div id = "tcm-calendar-month-content">
-    <div v-for="day in Weeks" 
+    <div v-for="day in monthRange" 
     v-on:click="say('hi')"
-    class = "tcm-calendar-entry">{{day}}</div>
+    class = "tcm-calendar-entry">{{day.getDate()}}</div>
     </div>
 </div>
 
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { computeFifthWeek } from './../utils.js'
+import { getMonth, computeFifthWeek } from './../utils.js'
 import Event from './Event.vue'
 
 export default {
@@ -65,6 +65,10 @@ export default {
             get : function () {
                 return this.selectedMonth
             }
+        },
+
+        monthRange: function() {
+            return getMonth(this.selectedMonth)
         },
         
         currentDate: function() {
@@ -144,7 +148,7 @@ export default {
     padding: 0;
     margin: 0;
     display: grid;
-    grid-template-columns: 20px repeat(7, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     grid-template-rows: repeat(6, 80px);
     position: relative;
 }
@@ -164,9 +168,6 @@ export default {
     margin-bottom: -1px;
 }
 
-.tcm-calendar-entry:nth-child(8n+1){
-    border: none;
-}
 
 
 #spacer {
