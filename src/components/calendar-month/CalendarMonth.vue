@@ -14,8 +14,8 @@
             
             
         <a class="button is-outlined is-dark">
-            {{ months[selectedMonth.getMonth()] }}
-            {{ selectedMonth.getFullYear() }}
+            {{ months[date.getMonth()] }}
+            {{ date.getFullYear() }}
         </a>
         <a class="button is-outlined is-dark"
            v-on:click="nextMonth()">></a>
@@ -43,10 +43,16 @@ import { getMonth, computeFifthWeek } from './../utils.js'
 import Event from './Event.vue'
 
 export default {
-    
+    props: {
+        date: {
+            type: Date,
+            required: true
+        }
+    },
+
     data() {        
         return { 
-            selectedMonth : new Date(),
+            date : new Date(),
             // void elements to create first column            
             firstWeeks : [,1,2,3,4,5,6,7,,8,9,10,11,12,13,14,,15,16,17,18,19,20,21,,22,23,24,25,26,27,28],
             
@@ -57,18 +63,9 @@ export default {
     },
     
     computed: {
-        selectedMonth: {
-            set : function (newMonthDate) {
-                this.selectedMonth = newMonthDate
-            },
-            
-            get : function () {
-                return this.selectedMonth
-            }
-        },
 
         monthRange: function() {
-            return getMonth(this.selectedMonth)
+            return getMonth(this.date)
         },
         
         currentDate: function() {
@@ -76,7 +73,7 @@ export default {
         },
         
         fifthWeek: function() {
-            return computeFifthWeek(this.selectedMonth)
+            return computeFifthWeek(this.date)
         },
         
         Weeks: function() {
@@ -96,17 +93,17 @@ export default {
         },
         
         previousMonth : function () {
-         var temp = new Date(this.selectedMonth)
-         var month = this.selectedMonth.getMonth()
+         var temp = new Date(this.date)
+         var month = this.date.getMonth()
          temp.setMonth(month-1)
-         this.selectedMonth = temp
+         this.date = temp
         },
         
         nextMonth : function () {
-         var temp = new Date(this.selectedMonth)
-         var month = this.selectedMonth.getMonth()
+         var temp = new Date(this.date)
+         var month = this.date.getMonth()
          temp.setMonth(month+1)
-         this.selectedMonth = temp
+         this.date = temp
         },
         
         cellSelected(value) {
