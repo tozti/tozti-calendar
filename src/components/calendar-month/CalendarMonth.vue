@@ -15,9 +15,14 @@
 
 
 <div id = "tcm-calendar-month-content">
-    <div v-for="day in monthRange" 
-    class = "tcm-calendar-entry">{{day.getDate()}}</div>
-    </div>
+            <cell v-for="(day, index) in monthRange" 
+            v-on:click="say('hi')"
+        :day = day
+        :key = "index"
+        :events = "eventsPerDay[hashDate(day)]"
+            class = "tcm-calendar-entry">
+            </cell>
+        </div>
 </div>
 
     <!-- FIN DU CONTENU -->
@@ -25,6 +30,7 @@
 
 <script>
 import { getMonth, computeFifthWeek } from './../utils.js'
+import Cell from './Cell.vue'
 import Event from './Event.vue'
 
 export default {
@@ -43,14 +49,41 @@ export default {
             
             weekDays : ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"],
             
-            months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+            months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
+            
+            events: [{start : new Date(2018, 1, 2, 1, 0, 0, 0), end: new Date(2018, 1, 4, 4, 0, 0, 0)}, {start : new Date(2018, 1, 3, 1, 0, 0, 0), end: new Date(2018, 1, 10, 4, 0, 0, 0) } ]
         }
     },
+
+components : {
+	Cell
+},
     
     computed: {
 
         monthRange: function() {
             return getMonth(this.date)
+        },
+
+        eventsPerDay: function() {
+            let evPerDay = []
+            let i = 0
+            for(i = 0; i < this.monthRange.length; i++) {
+                evPerDay[this.hashDate(this.monthRange[i])] = []
+            }
+            for(i = 0 ; i < this.events.length ; i++) {
+                let date = new Date(this.events[i].start.getTime())
+                let endDate = this.hashDate(this.events[i].end)
+                while(this.hashDate(date) != endDate) {
+                    evPerDay[this.hashDate(date)].push(this.events[i])
+                    date.setDate(date.getDate()+1)
+                }
+                
+                    evPerDay[this.hashDate(date)].push(this.events[i])
+                
+            }
+            console.log(evPerDay)
+            return evPerDay;
         },
         
         currentDate: function() {
@@ -75,6 +108,13 @@ export default {
         
         assignMonth: function (newDate) {
             this.monthDate = newDate
+        },
+        
+        hashDate: function (date) {
+            let y = date.getFullYear()
+            let m = date.getMonth()
+            let d = date.getDate()
+            return `${y}/${m}/${d}`
         },
         
         previousMonth : function () {
