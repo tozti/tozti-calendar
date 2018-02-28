@@ -47,7 +47,7 @@
                             </a>
                         </p>
                         <p class="level-item title is-4">
-                            {{monthLabel}}
+                            {{monthLabel}} {{yearLabel}}
                         </p>
                     </div>
 
@@ -79,8 +79,8 @@
                           ref="calendar"/>
                 </template>
                 <template v-else>
-                    {{ offset_calendar }}
-                    <CalendarMonth :date="offset_calendar"/>
+                    <CalendarMonth :date="offset_calendar"
+                                    style="height:100%"/>
                 
                 </template>
             </div>
@@ -173,6 +173,9 @@ export default {
         monthLabel() {
             const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"]
             return months[this.offset_calendar.getMonth()]
+        },
+        yearLabel() {
+            return this.offset_calendar.getFullYear()
         }
     },
 

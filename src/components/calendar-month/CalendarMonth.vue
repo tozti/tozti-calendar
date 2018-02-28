@@ -7,21 +7,7 @@
 
 
 <div id = "tcm-calendar-month">
-        
-    <div class = "tcm-calendar-title-month">
-        <a class="button is-outlined is-dark"
-           v-on:click="previousMonth()"><</a>
-            
-            
-        <a class="button is-outlined is-dark">
-            {{ months[date.getMonth()] }}
-            {{ date.getFullYear() }}
-        </a>
-        <a class="button is-outlined is-dark"
-           v-on:click="nextMonth()">></a>
-    </div>
-        
-    
+  
     <div id = "tcm-calendar-title-days">
         <div v-for="titleDay in weekDays" class = "tcm-calendar-title-day ">{{titleDay}}</div>
 
@@ -30,7 +16,6 @@
 
 <div id = "tcm-calendar-month-content">
     <div v-for="day in monthRange" 
-    v-on:click="say('hi')"
     class = "tcm-calendar-entry">{{day.getDate()}}</div>
     </div>
 </div>
@@ -144,9 +129,10 @@ export default {
     height: calc(100% - 80px);
     padding: 0;
     margin: 0;
+    margin-left: 50px;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(6, 80px);
+    grid-template-rows: repeat(6, 1fr);
     position: relative;
 }
 
@@ -160,9 +146,10 @@ export default {
 
 .tcm-calendar-entry {
     padding: 0 10px;
-    border: 1px solid grey;
     margin-left: -1px;
     margin-bottom: -1px;
+    background-color: white;
+    box-shadow: 0 0px 0px rgba(68, 68, 68, 0.1), 0 0 0 1px rgba(68, 68, 68, 0.1);
 }
 
 
@@ -171,32 +158,26 @@ export default {
     flex: 0 0 80px;
 }
 
+.tcm-greyed-days {
+    background-color: grey;
+}
   
     
-.tcm-calendar-title-month {
-    margin-left: 19px;
-    height: 46px;
-    font-size: 22px;
-    color: darkblue;
-    text-align: center;
-}
-    
 #tcm-calendar-title-days {
-    height: 23px;
-    margin-left: 19px;
+    margin-left: 50px;
+    height: 38px;
     display: grid;
     flex-direction: row;
     grid-template-columns: repeat(7, 1fr);
-    border: 1px solid grey;
     border-bottom: none;
-    
+    margin-bottom: .1rem;
+    box-shadow: 0 2px 3px rgba(68, 68, 68, 0.1), 0 0 0 1px rgba(68, 68, 68, 0.1);
 }
-    
+
 .tcm-calendar-title-day {
     flex-direction: row;
-    span {
-        font-size: 18px;
-    }
+    font-size: 23px;
+    font-weight: bold;
     color: dark-grey;
     border-bottom: 1px solid dark-grey;
     justify-self: center;
