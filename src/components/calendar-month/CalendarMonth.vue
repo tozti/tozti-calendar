@@ -43,7 +43,6 @@ export default {
 
     data() {        
         return { 
-            date : new Date(),
             // void elements to create first column            
             firstWeeks : [,1,2,3,4,5,6,7,,8,9,10,11,12,13,14,,15,16,17,18,19,20,21,,22,23,24,25,26,27,28],
             
@@ -75,15 +74,18 @@ components : {
                 let date = new Date(this.events[i].start.getTime())
                 let endDate = this.hashDate(this.events[i].end)
                 while(this.hashDate(date) != endDate) {
-                    evPerDay[this.hashDate(date)].push(this.events[i])
+                    if (evPerDay[this.hashDate(date)]){
+                        evPerDay[this.hashDate(date)].push(this.events[i])
+                    }
                     date.setDate(date.getDate()+1)
                 }
-                
-                    evPerDay[this.hashDate(date)].push(this.events[i])
+                    if (evPerDay[this.hashDate(date)]){
+                           evPerDay[this.hashDate(date)].push(this.events[i])
+                    }
                 
             }
             console.log(evPerDay)
-            return evPerDay;
+            return evPerDay
         },
         
         currentDate: function() {
