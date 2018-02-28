@@ -196,7 +196,7 @@ export function arrangeEvents(events) {
     }
 
     for (i = Ev.length - 1; i >= 0; i--) { // boucle sur le nombre d'evenement, calcul la taille de chaque evenements part 2
-        var elemIntersec = Array(Ev.length);
+        var elemIntersec = new Array(Ev.length);
         var minTailleIntersec = 0; 
         for(j = Ev[i].Start ; j < Ev[i].End ; j += discretStep) { // boucle sur la durée des evenements
             for(k = 1 ; k < eventArray[Math.trunc(j/discretStep)].length ; k++) { // boucle sur les intersections (Id des element qui intersecte)
