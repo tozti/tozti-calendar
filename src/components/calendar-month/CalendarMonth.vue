@@ -59,7 +59,7 @@ export default {
             
             months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
             
-            events: [{start : new Date(2018, 1, 2, 1, 0, 0, 0), end: new Date(2018, 1, 4, 4, 0, 0, 0)}, {start : new Date(2018, 1, 3, 1, 0, 0, 0), end: new Date(2018, 1, 10, 4, 0, 0, 0) } ]
+            events: [{start : new Date(2018, 2, 1, 2, 0, 0, 0), end: new Date(2018, 2, 6, 4, 0, 0, 0), display_color:"blue"}, {start : new Date(2018, 2, 4, 1, 0, 0, 0), end: new Date(2018, 2, 16, 4, 0, 0, 0), display_color:"red" } ]
         }
     },
 
@@ -92,14 +92,17 @@ components : {
                 let date = new Date(this.events[i].start.getTime())
                 let endDate = this.hashDate(this.events[i].end)
                 while(this.hashDate(date) != endDate) {
-                    evPerDay[this.hashDate(date)].push(this.events[i])
+                    if(Array.isArray(evPerDay[this.hashDate(date)])) {      //Avoid trying to compute events of another month. 
+                        evPerDay[this.hashDate(date)].push(this.events[i])
+                    }
                     date.setDate(date.getDate()+1)
                 }
                 
-                    evPerDay[this.hashDate(date)].push(this.events[i])
+                    if(Array.isArray(evPerDay[this.hashDate(date)])) {
+                        evPerDay[this.hashDate(date)].push(this.events[i])
+                    }
                 
             }
-            console.log(evPerDay)
             return evPerDay;
         },
         

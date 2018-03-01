@@ -8,19 +8,23 @@
 
 <div>
 {{day.getDate()}}
-  <p v-for="elem in this.events">
-    even
-  </p>
+  <event v-for="(ev, id) in this.events" v-bind="ev" :key="id">
+  </event>
 </div>
 
     <!-- FIN DU CONTENU -->
 </template>
 
 <script>
+import Event from "./Event.vue"
 export default {
     
     data() {        
         return { }
+    },
+    
+    components: {
+        Event
     },
     
     props: ["day", "events"],
@@ -35,4 +39,6 @@ export default {
 </script>
 
 <style>
+
+
 </style>

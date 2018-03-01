@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="circle" :style="backgroundColor">
     </div>
 </template>
 
@@ -15,6 +15,9 @@ export default {
         }
     },
     computed: {
+        backgroundColor : function () {
+            return "background-color:" + this.display_color
+        }
     },
     methods: {
     },
@@ -24,4 +27,11 @@ export default {
 </script>
 
 <style scoped>
+
+.circle {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+}
+
 </style>
