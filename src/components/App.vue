@@ -200,6 +200,11 @@ export default {
             this.events.push(
                 new_event
             )
+            if (this.$refs.calendar) {
+                Vue.nextTick().then(() => {
+                    this.$refs.calendar.updateEventsRendering()
+                })
+            }
         },
 
 		deleteEvent(id) {
@@ -209,6 +214,7 @@ export default {
 					this.events.splice(i, 1);
 				}
 			}
+            this.sidebarClose()
 		},
 
         nextCalendarStep() {
@@ -220,8 +226,10 @@ export default {
                 this.offset_calendar = new Date(this.offset_calendar.getTime() + offset.getTime())
             }
             else {
-                var temp = new Date(this.offset_calendar)
-                temp.setMonth(temp.getMonth())
+                var temp = new Date(this.offset_calendar.getTime())
+                console.log("->" + temp.getMonth())
+                temp.setMonth(temp.getMonth() + 1)
+                console.log("->" + temp.getMonth())
                 this.offset_calendar = temp
             }
              
@@ -238,8 +246,8 @@ export default {
             else {
                 var temp = new Date(this.offset_calendar)
                 var prev = temp.getMonth()
-                temp.setMonth(prev-2)
-                this.offset_calendar = new Date(temp)
+                temp.setMonth(prev-1)
+                this.offset_calendar = new Date(temp.getTime())
             } 
         },
 

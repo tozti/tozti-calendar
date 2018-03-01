@@ -6,7 +6,7 @@
 
 
 
-<div>
+<div :class="greyedClass">
 {{day.getDate()}}
   <event v-for="(ev, id) in this.events" v-bind="ev" :key="id" 
     v-on:view-event="$emit('view-event', $event)">
@@ -28,12 +28,16 @@ export default {
         Event
     },
     
-    props: ["day", "events"],
+    props: ["day", "thmonth", "events"],
     
     computed: {
         ev: function() {     
            if(this.events == []) {return ""}
            else {return events}  
+        },
+        greyedClass: function() {
+            console.log(this.thmonth, this.day.getMonth())
+            return (this.thmonth == this.day.getMonth()) ? "" : 'tcm-greyed-days'
         }
     },
 }
@@ -42,4 +46,8 @@ export default {
 <style>
 
 
+.tcm-greyed-days {
+    background-color: #eeeeee;
+}
+  
 </style>

@@ -3,34 +3,33 @@
     <!-- merci de prefixer les class & id par tcm 
         (pour ToztiCalendarMonth). Histoire d'éviter des 
         conflits -->
+        <div id = "tcm-calendar-month">
 
+            <div id = "tcm-calendar-title-days">
+                <div 
+                    v-for="titleDay in weekDays" 
+                    class = "tcm-calendar-title-day ">
+                    {{titleDay}}
+                </div>
+            </div>
 
-
-<div id = "tcm-calendar-month">
-  
-    <div id = "tcm-calendar-title-days">
-        <div v-for="titleDay in weekDays" class = "tcm-calendar-title-day ">{{titleDay}}</div>
-
-    </div>
-
-
-<div id = "tcm-calendar-month-content">
-            <cell v-for="(day, index) in monthRange" 
-            v-on:click="say('hi')"
-        :day = day
-        :key = "index"
-        :events = "eventsPerDay[hashDate(day)]"
-            class = "tcm-calendar-entry"            
-           v-on:view-event="$emit('view-event', $event)">
-            </cell>
+            <div id = "tcm-calendar-month-content">
+                <cell v-for="(day, index) in monthRange" 
+                      :day = "day"
+                      :thmonth = "date.getMonth()"
+                      :key = "index"
+                      :events = "eventsPerDay[hashDate(day)]"
+                      class = "tcm-calendar-entry"            
+                      v-on:view-event="$emit('view-event', $event)">
+                </cell>
+            </div>
         </div>
-</div>
 
     <!-- FIN DU CONTENU -->
 </template>
 
 <script>
-import { getMonth, computeFifthWeek } from './../utils.js'
+import { getMonth } from './../utils.js'
 import Cell from './Cell.vue'
 import Event from './Event.vue'
 
@@ -49,11 +48,7 @@ export default {
     data() {        
         return { 
             // void elements to create first column            
-            firstWeeks : [,1,2,3,4,5,6,7,,8,9,10,11,12,13,14,,15,16,17,18,19,20,21,,22,23,24,25,26,27,28],
-            
             weekDays : ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"],
-            
-            months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
         }
     },
 
@@ -64,6 +59,7 @@ components : {
     computed: {
 
         monthRange: function() {
+            console.log(this.date, getMonth(this.date))
             return getMonth(this.date)
         },
 
@@ -90,49 +86,17 @@ components : {
             return evPerDay
         },
         
-        currentDate: function() {
-            return new Date()
-        },
         
-        fifthWeek: function() {
-            return computeFifthWeek(this.date)
-        },
-        
-        Weeks: function() {
-            return (this.firstWeeks).concat(this.fifthWeek)
-        }
     },
     
     
     methods: {
-        
-        say: function (message) {
-      alert(message)
-    },
-        
-        assignMonth: function (newDate) {
-            this.monthDate = newDate
-        },
         
         hashDate: function (date) {
             let y = date.getFullYear()
             let m = date.getMonth()
             let d = date.getDate()
             return `${y}/${m}/${d}`
-        },
-        
-        previousMonth : function () {
-         var temp = new Date(this.date)
-         var month = this.date.getMonth()
-         temp.setMonth(month-1)
-         this.date = temp
-        },
-        
-        nextMonth : function () {
-         var temp = new Date(this.date)
-         var month = this.date.getMonth()
-         temp.setMonth(month+1)
-         this.date = temp
         },
         
         cellSelected(value) {

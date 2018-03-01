@@ -3,9 +3,9 @@ function leapYear(year)
   return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
 }
 
-export function getMonth(date)
+export function getMonth(date_in_month)
 {
-console.log(date)
+    let date = new Date(date_in_month.getTime())
     var arMonth = [];
     var month = date.getMonth();
     date.setDate(1);
@@ -23,27 +23,6 @@ console.log(date)
         date.setDate(date.getDate()+1);
     }
     return arMonth;
-}
-
-function daysInMonth(anyDateInMonth) {
-    return new Date(anyDateInMonth.getYear(), 
-                    anyDateInMonth.getMonth()+1, 
-                    0).getDate();}
-
-export function computeFifthWeek(date) {
-    let daysleft = (daysInMonth(date)-28)
-    let out = [,]
-    if (daysleft >= 0) {}
-    if (daysleft >= 1) {
-        out.push(29)
-    }
-    if (daysleft >= 2) {
-        out.push(30)
-    }
-    if (daysleft >= 3){
-        out.push(31)
-    }
-    return out
 }
 
 export function enlargeContainerForScrollbar (container_class) {
