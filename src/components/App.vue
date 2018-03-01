@@ -80,6 +80,7 @@
                 </template>
                 <template v-else>
                     <CalendarMonth :date="offset_calendar"
+                                    :events="events"
                                     style="height:100%"/>
                 
                 </template>

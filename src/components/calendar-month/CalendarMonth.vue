@@ -38,7 +38,11 @@ export default {
         date: {
             type: Date,
             required: true
-        }
+        },
+        events: {
+            type: Array,
+        } 
+        
     },
 
     data() {        
@@ -49,8 +53,6 @@ export default {
             weekDays : ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"],
             
             months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
-            
-            events: [{start : new Date(2018, 2, 1, 2, 0, 0, 0), end: new Date(2018, 2, 6, 4, 0, 0, 0), display_color:"blue"}, {start : new Date(2018, 2, 4, 1, 0, 0, 0), end: new Date(2018, 2, 16, 4, 0, 0, 0), display_color:"red" } ]
         }
     },
 
