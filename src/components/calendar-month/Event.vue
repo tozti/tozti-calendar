@@ -1,5 +1,6 @@
 <template>
-    <div class="circle" :style="backgroundColor">
+    <div class="circle" :style="backgroundColor" 
+  @dblclick="foo()">
     </div>
 </template>
 
@@ -20,6 +21,10 @@ export default {
         }
     },
     methods: {
+    foo() {
+        this.$emit('view-event', this.id)
+        }
+    
     },
     watch: {
     }
@@ -29,8 +34,8 @@ export default {
 <style scoped>
 
 .circle {
-  width: 10px;
-  height: 10px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
 }
 

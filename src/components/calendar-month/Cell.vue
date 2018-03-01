@@ -8,7 +8,8 @@
 
 <div>
 {{day.getDate()}}
-  <event v-for="(ev, id) in this.events" v-bind="ev" :key="id">
+  <event v-for="(ev, id) in this.events" v-bind="ev" :key="id" 
+    v-on:view-event="$emit('view-event', $event)">
   </event>
 </div>
 

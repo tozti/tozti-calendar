@@ -20,7 +20,8 @@
         :day = day
         :key = "index"
         :events = "eventsPerDay[hashDate(day)]"
-            class = "tcm-calendar-entry">
+            class = "tcm-calendar-entry"            
+           v-on:view-event="$emit('view-event', $event)">
             </cell>
         </div>
 </div>

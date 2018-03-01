@@ -61,6 +61,7 @@ export default {
     transition: 1s all;
     margin: 0;
     height: 100%;
+    overflow-y: scroll;
 }
 .tc-close-btn {
     border-left: 0px;
