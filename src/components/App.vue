@@ -79,9 +79,9 @@
                 </template>
                 <template v-else>
                     <CalendarMonth :date="offset_calendar"
-                                    :events="events"
+                          :events="events"
                           v-on:view-event="sidebarViewEvent($event)"
-                                    style="height:100%"/>
+                          style="height:100%"/>
                 
                 </template>
             </div>

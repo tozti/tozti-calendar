@@ -53,9 +53,11 @@ export default {
     props: ['start', 'end', 'events'],
     data() {
         return {
-            state : {
+            state: {
                 status: CWActionStatus.none
-            }
+            },
+
+            days: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"]
         }
     },
     computed: {
@@ -129,9 +131,9 @@ export default {
     },
 
     methods: {
+
         dateLabel(date) {
-            const days = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"]
-            return days[date.getDay()] + " " + date.getDate()
+            return this.days[date.getDay()] + " " + date.getDate()
         },
 
         updateEventsRendering() {

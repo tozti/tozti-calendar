@@ -134,7 +134,7 @@ components : {
 }
 
 #tcm-calendar-month-content {
-    height: calc(100% - 110px);
+    height: calc(100% - 80px);
     padding: 0;
     margin: 0;
     margin-top: -1px;
@@ -162,6 +162,7 @@ components : {
     text-transform: uppercase;
     font-size: 1em;
     font-weight: 300; 
+    height: 100px;
 }
 
 
