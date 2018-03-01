@@ -1,3 +1,51 @@
+function leapYear(year)
+{
+  return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+}
+
+export function getMonth(date)
+{
+console.log(date)
+    var arMonth = [];
+    var month = date.getMonth();
+    date.setDate(1);
+    while(date.getDay() != 1) {
+        date.setDate(date.getDate()-1);
+    }
+    while(date.getMonth() != month) {
+        var newDay = new Date(date.getTime());
+        arMonth.push(newDay);
+        date.setDate(date.getDate()+1);
+    }
+    while(date.getMonth() == month || date.getDay() != 1) {
+        var newDay = new Date(date.getTime());
+        arMonth.push(newDay);
+        date.setDate(date.getDate()+1);
+    }
+    return arMonth;
+}
+
+function daysInMonth(anyDateInMonth) {
+    return new Date(anyDateInMonth.getYear(), 
+                    anyDateInMonth.getMonth()+1, 
+                    0).getDate();}
+
+export function computeFifthWeek(date) {
+    let daysleft = (daysInMonth(date)-28)
+    let out = [,]
+    if (daysleft >= 0) {}
+    if (daysleft >= 1) {
+        out.push(29)
+    }
+    if (daysleft >= 2) {
+        out.push(30)
+    }
+    if (daysleft >= 3){
+        out.push(31)
+    }
+    return out
+}
+
 export function enlargeContainerForScrollbar (container_class) {
     // As on Firefox and Chrome the scrollbar takes rooms inside the element,
     // to keep everything align we must enlarge the element by the size of the scrollbar.
@@ -148,7 +196,7 @@ export function arrangeEvents(events) {
     }
 
     for (i = Ev.length - 1; i >= 0; i--) { // boucle sur le nombre d'evenement, calcul la taille de chaque evenements part 2
-        var elemIntersec = Array(Ev.length);
+        var elemIntersec = new Array(Ev.length);
         var minTailleIntersec = 0; 
         for(j = Ev[i].Start ; j < Ev[i].End ; j += discretStep) { // boucle sur la durée des evenements
             for(k = 1 ; k < eventArray[Math.trunc(j/discretStep)].length ; k++) { // boucle sur les intersections (Id des element qui intersecte)

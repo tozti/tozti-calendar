@@ -47,7 +47,7 @@
                             </a>
                         </p>
                         <p class="level-item title is-4">
-                            {{monthLabel}}
+                            {{monthLabel}} {{yearLabel}}
                         </p>
                     </div>
 
@@ -60,10 +60,6 @@
                     </div>
                 </nav>
 
-                <b-modal :active.sync="isComponentModalActive" has-modal-card>
-                    <modal-form v-bind="formProps"></modal-form>
-                </b-modal>
-
                 <template v-if="scaleCalendar===0">
                     <calendar-week :start="offset_calendar"
                           :end="new Date((offset_calendar).getTime() + day.getTime() - day.getTime())"
@@ -74,18 +70,20 @@
                     </calendar-week>
                 </template>
                 <template v-else-if="scaleCalendar===1">
-                    <calendar-week :start="offset_calendar"
+                    <CalendarWeek :start="offset_calendar"
                           :end="new Date((offset_calendar).getTime() + week.getTime() - day.getTime())"
                           v-on:view-event="sidebarViewEvent($event)"
                           v-on:update="updateEvent($event)"
                           v-on:zoom-in="zoomin($event)"
                           :events="events"
-                          ref="calendar">
-                    </calendar-week>
+                          ref="calendar"/>
                 </template>
                 <template v-else>
-                    <calendar-month>
-                    </calendar-month>
+                    <CalendarMonth :date="offset_calendar"
+                                    :events="events"
+                          v-on:view-event="sidebarViewEvent($event)"
+                                    style="height:100%"/>
+                
                 </template>
             </div>
             <sidebar-menu class = "tc-sidebar" 
@@ -117,7 +115,7 @@ const SidebarStatus = Object.freeze({View: 0, Modify: 1, Create: 2})
 import ModalForm from './EventCreationModal.vue'
 import CalendarWeek from './calendarweek/CalendarWeek.vue'
 import CalendarDay from './CalendarDay.vue'
-import CalendarMonth from './CalendarMonth.vue'
+import CalendarMonth from './calendar-month/CalendarMonth.vue'
 import SidebarMenu from './SidebarMenu.vue'
 import { createOffsetDate } from './utils.js'
 import ModifyEvent from './ModifyEvent.vue'
@@ -149,7 +147,7 @@ export default {
             },
             week: createOffsetDate(0, 0, 7, 0, 0),
             day: createOffsetDate(0, 0, 1, 0, 0),
-            offset_calendar: new Date(2018, 2, 18),
+            offset_calendar: new Date(),
             events: [
                 {
                     start: new Date(2018, 2, 19, 2, 0, 0, 0), 
@@ -179,6 +177,9 @@ export default {
         monthLabel() {
             const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"]
             return months[this.offset_calendar.getMonth()]
+        },
+        yearLabel() {
+            return this.offset_calendar.getFullYear()
         }
     },
 
@@ -211,19 +212,35 @@ export default {
 		},
 
         nextCalendarStep() {
-            let offset = this.day
-            if (this.scaleCalendar == 1) {
-                offset = this.week
+            if (this.scaleCalendar != 2){
+                let offset = this.day
+                if (this.scaleCalendar == 1) {
+                    offset = this.week
+                }
+                this.offset_calendar = new Date(this.offset_calendar.getTime() + offset.getTime())
             }
-            this.offset_calendar = new Date(this.offset_calendar.getTime() + offset.getTime()) 
+            else {
+                var temp = new Date(this.offset_calendar)
+                temp.setMonth(temp.getMonth())
+                this.offset_calendar = temp
+            }
+             
         },
 
         previousCalendarStep() {
-            let offset = this.day
-            if (this.scaleCalendar == 1) {
-                offset = this.week
+            if (this.scaleCalendar != 2){
+                let offset = this.day
+                if (this.scaleCalendar == 1) {
+                    offset = this.week
+                }
+                this.offset_calendar = new Date(this.offset_calendar.getTime() - offset.getTime())
             }
-            this.offset_calendar = new Date(this.offset_calendar.getTime() - offset.getTime()) 
+            else {
+                var temp = new Date(this.offset_calendar)
+                var prev = temp.getMonth()
+                temp.setMonth(prev-2)
+                this.offset_calendar = new Date(temp)
+            } 
         },
 
         zoomin(focus_day) {
