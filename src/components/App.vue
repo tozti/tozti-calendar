@@ -61,13 +61,12 @@
                 </nav>
 
                 <template v-if="scaleCalendar===0">
-                    <calendar-week :start="offset_calendar"
+                    <CalendarWeek :start="offset_calendar"
                           :end="new Date((offset_calendar).getTime() + day.getTime() - day.getTime())"
                           v-on:view-event="viewEvent($event)"
                           v-on:update="updateEvent($event)"
                           :events="events"
-                          ref="calendar">
-                    </calendar-week>
+                          ref="calendar"/>
                 </template>
                 <template v-else-if="scaleCalendar===1">
                     <CalendarWeek :start="offset_calendar"

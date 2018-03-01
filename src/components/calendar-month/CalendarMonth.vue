@@ -134,10 +134,12 @@ components : {
 }
 
 #tcm-calendar-month-content {
-    height: calc(100% - 80px);
+    height: calc(100% - 110px);
     padding: 0;
     margin: 0;
-    margin-left: 50px;
+    margin-top: -1px;
+    margin-left: 30px;
+    margin-right: 30px;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: repeat(6, 1fr);
@@ -153,13 +155,14 @@ components : {
 
 
 .tcm-calendar-entry {
-    padding: 0 10px;
-    margin-left: -1px;
-    margin-bottom: -1px;
+    padding-left: .2rem;
     background-color: white;
     box-shadow: 0 0px 0px rgba(68, 68, 68, 0.1), 0 0 0 1px rgba(68, 68, 68, 0.1);
+    color: #6a6a6a;
+    text-transform: uppercase;
+    font-size: 1em;
+    font-weight: 300; 
 }
-
 
 
 #spacer {
@@ -172,29 +175,22 @@ components : {
   
     
 #tcm-calendar-title-days {
-    margin-left: 50px;
-    height: 38px;
+    margin-left: 30px;
+    margin-right: 30px;
     display: grid;
-    flex-direction: row;
     grid-template-columns: repeat(7, 1fr);
-    border-bottom: none;
-    margin-bottom: .1rem;
-    box-shadow: 0 2px 3px rgba(68, 68, 68, 0.1), 0 0 0 1px rgba(68, 68, 68, 0.1);
+    
 }
 
 .tcm-calendar-title-day {
-    flex-direction: row;
-    font-size: 23px;
-    font-weight: bold;
-    color: dark-grey;
-    border-bottom: 1px solid dark-grey;
-    justify-self: center;
+    margin-bottom: .1rem;
+    line-height: 1.125;
+    font-size: 1em;
+    color: #6a6a6a;
+    font-weight: 600;
+    padding: .75rem;
+    margin-bottom: .1rem;
+    box-shadow: 0 2px 3px rgba(68, 68, 68, 0.1), 0 0 0 1px rgba(68, 68, 68, 0.1);   
 }
 
-.tcm-calendar-time-cell {
-    display: flex;
-    align-items: flex-end;
-    text-align: left;
-    justify-content: flex-end;
-}
 </style>

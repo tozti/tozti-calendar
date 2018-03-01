@@ -6,6 +6,7 @@
         <div v-for="time in timeRange" class="tcw-inner-cal tcw-title"  v-on:dblclick="$emit('zoom-in', time)">
             <p class="title">{{ dateLabel(time) }}</p>
         </div>
+        <div class="tcw-spacer"></div>
         </div>
         <div class="tcw-container-scroll" style="position:relative;" ref="scrollable" 
             @mouseleave="stopAction()">
@@ -15,6 +16,7 @@
                         <div class="tcw-spacer tcw-inner-cal tcw-time">
                             <p> {{hour}} </p>
                         </div>
+
                         <calendar-cell v-for="time in timeRange"
                                        ref = "cells"
                                        :key="time.getTime()" 
@@ -25,6 +27,7 @@
                                        v-on:click-up="cellUnselected($event)"
                                        class="tcw-inner-cal tcw-entry">
                         </calendar-cell>
+                        <div class="tcw-spacer"></div>
                     </div> 
                 </div>
                 <div class="tcw-container-events">
@@ -127,7 +130,7 @@ export default {
 
     methods: {
         dateLabel(date) {
-            const days = ["Di", "Lu", "Ma", "Me", "Je", "Ve", "Sa"]
+            const days = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"]
             return days[date.getDay()] + " " + date.getDate()
         },
 
@@ -283,8 +286,14 @@ export default {
 .tcw-title {
     padding: .75rem;
     margin-bottom: .1rem;
-    box-shadow: 0 2px 3px rgba(68, 68, 68, 0.1), 0 0 0 1px rgba(68, 68, 68, 0.1);
+    box-shadow: 0 2px 3px rgba(68, 68, 68, 0.1), 0 0 0 1px rgba(68, 68, 68, 0.1);   
 }
+
+.title{
+  font-size: 1em;
+  color: #6a6a6a;
+}
+
 
 .tcw-row {
     display: flex;
@@ -292,8 +301,8 @@ export default {
 
 
 .tcw-spacer{
-    min-width: 50px;
-    max-width: 50px;
+    min-width: 30px;
+    max-width: 30px;
 }
 
 .tcw-container-scroll {
@@ -312,20 +321,24 @@ margin-right: 0px;
     flex-shrink: 1;
 }
 
+
 .tcw-entry {
     overflow: visible;
     height: 50px ;
     background-color: white;
     box-shadow: 0 0px 0px rgba(68, 68, 68, 0.1), 0 0 0 1px rgba(68, 68, 68, 0.1);
-
-
-    /* to display events in a "flex" way, ie several events can be displayed*/
     display: flex;
 }
+
 .tcw-time {
     align-self: flex-end;
     text-align: right;
     padding-right: 10px;
+
+    color: #6a6a6a;
+    text-transform: uppercase;
+    font-size: 1em;
+    font-weight: 300; 
 }
 
 </style>
