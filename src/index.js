@@ -7,3 +7,11 @@ tozti.addRoutes([
 ])
 tozti.addMenuItem("Calendrier", "/calendar", { icon: 'nc-calendar-60' })
 tozti.addWorkspaceMenuItem("Calendrier", "/workspaceCalendar", { icon: 'nc-calendar-60' })
+
+tozti.addResourceType(
+    'calendar/event',
+    'calendar-plus', 'événement', 'm',
+    {},
+    {},
+    {}
+)
